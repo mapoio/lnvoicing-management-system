@@ -1,0 +1,21 @@
+@import '_base.scss';
+
+.dashboard {
+    flex-direction: column;
+}
+
+.avatarsContainer {
+    display: flex;
+}
+
+.avatars {
+    flex: 1;
+}
+
+.test {
+    width: 2px;
+}
+
+.casr {
+    width: 5px;
+}

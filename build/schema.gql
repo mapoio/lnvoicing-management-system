@@ -1,0 +1,261 @@
+"""
+标准日期格式
+"""
+scalar Date
+
+"""
+根突变
+"""
+type Mutation {
+  """
+  测试消息
+  """
+  welcome(name: Date!): Date
+  """
+  赞同
+  """
+  upvote(id: Int!, userID: Int!): Post
+  """
+  不赞同
+  """
+  downvote(id: Int!, userID: Int!): Post
+  """
+  创建用户
+  """
+  createUser(user: UserInput!): User
+}
+
+"""
+文章实体类型
+"""
+type Post {
+  id: Int!
+  title: String!
+  author: User
+  votes: Int
+  voters(limit: Int): [User]
+  createdAt: Date
+  error: String
+}
+
+"""
+公司/个人实体
+"""
+type Entity {
+  """
+  公司/个人实体类型
+  """
+  type: String!
+  """
+  公司/个人实体名称
+  """
+  name: String!
+  """
+  公司/个人实体电话
+  """
+  phone: String
+  """
+  公司/个人实体地址
+  """
+  address: String
+  """
+  公司/个人实体传真
+  """
+  fax: String
+  """
+  公司/个人实体电子邮箱
+  """
+  email: String
+  """
+  公司/个人实体ID
+  """
+  id: ID!
+}
+
+"""
+根查询
+"""
+type Query {
+  hello: String
+  posts(limit: Int): [Post]
+  """
+  用户实体复数
+  """
+  users(limit: Int): [User]
+  """
+  用户实体
+  """
+  user(userName: String!): User
+  entity(id: String!): Entity
+  entitys(limit: Int): [Entity]
+}
+
+"""
+用户实体
+"""
+type User {
+  """
+  唯一ID
+  """
+  id: ID!
+
+  """
+  用户名
+  """
+  userName: String! @mock(rule: "@word(6, 10)")
+
+  """
+  用户昵称
+  """
+  nickName: String! @mock(rule: "@cword(3, 10)")
+
+  """
+  真实姓名
+  """
+  realName: String! @mock(rule: "@cname")
+
+  """
+  电子邮箱
+  """
+  email: String! @mock(rule: "@email")
+
+  """
+  手机号码
+  """
+  phone: String! @fake(type: phoneNumber)
+
+  """
+  学院
+  """
+  academy: String! @mock(rule: "@cword(3, 10)")
+
+  """
+  班级
+  """
+  className: String! @mock(rule: "@cword(3, 10)")
+
+  """
+  学号
+  """
+  studentNumber: String! @mock(rule: "@integer(200000000000, 202000000000)")
+
+  """
+  成员类型
+  """
+  type: userType!
+
+  """
+  账户状态
+  """
+  status: userStatus!
+
+  """
+  创建时间
+  """
+  createdAt: Date!
+
+  """
+  更新时间
+  """
+  updatedAt: Date!
+
+  """
+  数据版本
+  """
+  version: Int! @mock(rule: "@integer(1, 10)")
+  """
+  文章
+  """
+  posts(limit: Int = 5): [Post]
+  """
+  所属公司
+  """
+  entity: Entity
+}
+
+input UserInput {
+  """
+  用户名
+  """
+  userName: String!
+
+  """
+  用户昵称
+  """
+  nickName: String!
+
+  """
+  用户密码
+  """
+  password: String!
+
+  """
+  真实姓名
+  """
+  realName: String!
+
+  """
+  电子邮箱
+  """
+  email: String!
+
+  """
+  手机号码
+  """
+  phone: String!
+
+  """
+  学院
+  """
+  academy: String!
+
+  """
+  班级
+  """
+  className: String!
+
+  """
+  学号
+  """
+  studentNumber: String!
+}
+
+"""
+用户状态
+"""
+enum userStatus {
+  """
+  激活状态
+  """
+  ACTIVE
+
+  """
+  审核状态
+  """
+  PEDDING
+
+  """
+  暂停状态
+  """
+  PAUSE
+}
+
+"""
+用户类型
+"""
+enum userType {
+  """
+  ACM会员
+  """
+  ACM
+
+  """
+  外部注册用户
+  """
+  EXTEND
+
+  """
+  内部工作人员用户
+  """
+  LDAP
+}
