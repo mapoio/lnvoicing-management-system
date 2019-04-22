@@ -1,94 +1,8 @@
+# import * from "../node_modules/webpack-graphql-mock/default.graphql"
 """
 标准日期格式
 """
 scalar Date
-
-"""
-根突变
-"""
-type Mutation {
-  """
-  测试消息
-  """
-  welcome(name: Date!): Date
-  """
-  赞同
-  """
-  upvote(id: Int!, userID: Int!): Post
-  """
-  不赞同
-  """
-  downvote(id: Int!, userID: Int!): Post
-  """
-  创建用户
-  """
-  createUser(user: UserInput!): User
-}
-
-"""
-文章实体类型
-"""
-type Post {
-  id: Int!
-  title: String!
-  author: User
-  votes: Int
-  voters(limit: Int): [User]
-  createdAt: Date
-  error: String
-}
-
-"""
-公司/个人实体
-"""
-type Entity {
-  """
-  公司/个人实体类型
-  """
-  type: String!
-  """
-  公司/个人实体名称
-  """
-  name: String!
-  """
-  公司/个人实体电话
-  """
-  phone: String
-  """
-  公司/个人实体地址
-  """
-  address: String
-  """
-  公司/个人实体传真
-  """
-  fax: String
-  """
-  公司/个人实体电子邮箱
-  """
-  email: String
-  """
-  公司/个人实体ID
-  """
-  id: ID!
-}
-
-"""
-根查询
-"""
-type Query {
-  hello: String
-  posts(limit: Int): [Post]
-  """
-  用户实体复数
-  """
-  users(limit: Int): [User]
-  """
-  用户实体
-  """
-  user(userName: String!): User
-  entity(id: String!): Entity
-  entitys(limit: Int): [Entity]
-}
 
 """
 用户实体
@@ -163,61 +77,6 @@ type User {
   数据版本
   """
   version: Int! @mock(rule: "@integer(1, 10)")
-  """
-  文章
-  """
-  posts(limit: Int = 5): [Post]
-  """
-  所属公司
-  """
-  entity: Entity
-}
-
-input UserInput {
-  """
-  用户名
-  """
-  userName: String!
-
-  """
-  用户昵称
-  """
-  nickName: String!
-
-  """
-  用户密码
-  """
-  password: String!
-
-  """
-  真实姓名
-  """
-  realName: String!
-
-  """
-  电子邮箱
-  """
-  email: String!
-
-  """
-  手机号码
-  """
-  phone: String!
-
-  """
-  学院
-  """
-  academy: String!
-
-  """
-  班级
-  """
-  className: String!
-
-  """
-  学号
-  """
-  studentNumber: String!
 }
 
 """
@@ -258,4 +117,1334 @@ enum userType {
   内部工作人员用户
   """
   LDAP
+}
+
+"""
+根突变
+"""
+type Mutation {
+  hello: String
+}
+
+# TODO: 划分QUery中的查询
+
+"""
+根查询
+"""
+type Query {
+  """
+  用户
+  """
+  user(id: String!): User
+  """
+  用户
+  """
+  users(limit: Int): [User]
+  """
+  供应商
+  """
+  supplier(id: String!): Supplier
+  """
+  供应商
+  """
+  suppliers(limit: Int): [Supplier]
+  """
+  采购单
+  """
+  purchase(id: String!): Purchase
+  """
+  采购单
+  """
+  purchases(limit: Int): [Purchase]
+  """
+  单个商品库存
+  """
+  stock(id: String!): Stock
+  """
+  单个商品库存
+  """
+  stocks(limit: Int): [Stock]
+  """
+  仓库
+  """
+  repertory(id: String!): Repertory
+  """
+  仓库
+  """
+  repertorys(limit: Int): [Repertory]
+  """
+  入库单
+  """
+  stockIn(id: String!): StockIn
+  """
+  入库单
+  """
+  stockIns(limit: Int): [StockIn]
+  """
+  出库单
+  """
+  stockOut(id: String!): StockOut
+  """
+  出库单
+  """
+  stockOuts(limit: Int): [StockOut]
+  """
+  型号
+  """
+  model(id: String!): Model
+  """
+  型号
+  """
+  models(limit: Int): [Model]
+  """
+  品牌
+  """
+  brand(id: String!): Brand
+  """
+  品牌
+  """
+  brands(limit: Int): [Brand]
+  """
+  商品
+  """
+  goods(id: String!): Goods
+  """
+  商品
+  """
+  goodses(limit: Int): [Goods]
+  """
+  员工
+  """
+  staff(id: String!): Staff
+  """
+  员工
+  """
+  staffs(limit: Int): [Staff]
+  """
+  客户
+  """
+  customer(id: String!): Customer
+  """
+  客户
+  """
+  customers(limit: Int): [Customer]
+  """
+  销售单
+  """
+  sale(id: String!): Sale
+  """
+  销售单
+  """
+  sales(limit: Int): [Sale]
+  """
+  退货单
+  """
+  resale(id: String!): Resale
+  """
+  退货单
+  """
+  resales(limit: Int): [Resale]
+  """
+  质量受理单
+  """
+  quality(id: String!): Quality
+  """
+  质量受理单
+  """
+  qualitys(limit: Int): [Quality]
+  """
+  质量受理项
+  """
+  qualityItem(goodsCode: String!): QualityItem
+  """
+  质量受理单项
+  """
+  qualityItems(limit: Int): [QualityItem]
+  """
+  运输单
+  """
+  transport(id: String!): Transport
+  """
+  运输单
+  """
+  transports(limit: Int): [Transport]
+  """
+  物流公司
+  """
+  logistic(id: String!): Logistic
+  """
+  物流公司
+  """
+  logistics(limit: Int): [Logistic]
+}
+
+"""
+采购单项
+"""
+type PurchaseItem {
+  """
+  采购单项ID
+  """
+  id: ID!
+  """
+  商品
+  """
+  goods: Goods!
+  """
+  进价
+  """
+  price: Float! @mock(rule: "@float(800, 4500, 2, 2)")
+  """
+  数量
+  """
+  amount: Int! @mock(rule: "@integer(1, 50)")
+  """
+  状态
+  """
+  status: purchaseItemStatus!
+  """
+  所属采购单
+  """
+  purchase: Purchase!
+}
+
+"""
+采购单项状态
+"""
+enum purchaseItemStatus {
+  """
+  激活
+  """
+  ACTIVE
+  """
+  停止
+  """
+  INACTIVE
+}
+
+"""
+供应商实体
+"""
+type Supplier {
+  """
+  供应商ID
+  """
+  id: ID!
+  """
+  名称
+  """
+  name: String!
+    @mock(
+      rule: "@pick(['湖南聚力有限责任公司', '大连好友有限责任公司', '常德力乐力有限责任公司', '长沙高距有限责任公司', '杭州昆莉有限责任公司'])"
+    )
+  """
+  地址
+  """
+  address: String @mock(rule: "@county(true)")
+  """
+  电话
+  """
+  phone: String @fake(type: phoneNumber)
+  """
+  传真
+  """
+  fax: String @fake(type: phoneNumber)
+  """
+  负责人名称
+  """
+  manageName: String @mock(rule: "@cname")
+  """
+  负责人电话
+  """
+  managePhone: String @fake(type: phoneNumber)
+  """
+  状态
+  """
+  status: supplierStatus!
+  """
+  类型
+  """
+  type: supplierType!
+  """
+  采购单
+  """
+  purchases: [Purchase]
+}
+
+"""
+供应商状态
+"""
+enum supplierStatus {
+  """
+  启用
+  """
+  ACTIVE
+  """
+  停用
+  """
+  INACTIVE
+}
+
+"""
+供应商类型
+"""
+enum supplierType {
+  """
+  高级
+  """
+  HIGH
+  """
+  中级
+  """
+  MIDDLE
+  """
+  初级
+  """
+  LOW
+}
+
+"""
+采购单
+"""
+type Purchase {
+  """
+  采购单ID
+  """
+  id: ID!
+  """
+  批次
+  """
+  batch: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  状态
+  """
+  status: purchaseStatus!
+  """
+  负责人
+  """
+  staff: Staff!
+  """
+  备注
+  """
+  remark: String @mock(rule: "@pick(['普通类型'])")
+  """
+  采购总价
+  """
+  money: Float! @mock(rule: "@float(10800, 104500, 2, 2)")
+  """
+  已付款
+  """
+  payedMoney: Float @mock(rule: "@float(10800, 104500, 2, 2)")
+  """
+  入库单
+  """
+  stockIn: StockIn
+  """
+  供应商
+  """
+  supplier: Supplier!
+  """
+  采购单
+  """
+  purchaseItems: [PurchaseItem]
+}
+
+"""
+采购单状态
+"""
+enum purchaseStatus {
+  """
+  已建立
+  """
+  BUILDED
+  """
+  已入库
+  """
+  STOCKIN
+  """
+  无效
+  """
+  INVAILD
+}
+
+"""
+单个商品库存实体
+"""
+type Stock {
+  """
+  库存ID
+  """
+  id: ID!
+  """
+  商品信息
+  """
+  goods: Goods!
+  """
+  商品识别码
+  """
+  goodsCode: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  库存状态
+  """
+  status: inStockStatus!
+  """
+  入库单
+  """
+  stockIn: StockIn!
+  """
+  出库单
+  """
+  stockOut: StockOut
+}
+
+"""
+库存状态
+"""
+enum inStockStatus {
+  """
+  正常
+  """
+  NORMAL
+  """
+  损毁
+  """
+  DAMAGE
+}
+
+"""
+仓库
+"""
+type Repertory {
+  """
+  仓库ID
+  """
+  id: ID!
+  """
+  名称
+  """
+  name: String! @mock(rule: "@pick(['长沙仓库', '常德仓库', '武汉仓库', '杭州仓库'])")
+  """
+  地址
+  """
+  address: String! @mock(rule: "@county(true)")
+  """
+  负责人姓名
+  """
+  manageName: String! @mock(rule: "@cname")
+  """
+  负责人电话
+  """
+  managePhone: String! @fake(type: phoneNumber)
+  """
+  仓库状态
+  """
+  status: repertoryStatus!
+  """
+  入库单
+  """
+  stockIns: [StockIn]
+  """
+  出库单
+  """
+  stockOuts: [StockOut]
+  """
+  库存数量
+  """
+  stockCount: [StockCount]
+}
+"""
+仓库库存
+"""
+type StockCount {
+  """
+  商品
+  """
+  goods: Goods!
+  """
+  库存数量
+  """
+  amount: Int! @mock(rule: "@integer(0, 560)")
+}
+
+"""
+仓库状态
+"""
+enum repertoryStatus {
+  """
+  激活
+  """
+  ACTIVE
+  """
+  停用
+  """
+  INACTIVE
+}
+
+"""
+入库单
+"""
+type StockIn {
+  """
+  入库单ID
+  """
+  id: ID!
+  """
+  批次
+  """
+  batch: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  状态
+  """
+  status: stockStatus!
+  """
+  操作人
+  """
+  staff: Staff!
+  """
+  类型
+  """
+  type: stockInType
+  """
+  仓库
+  """
+  repertory: Repertory!
+  """
+  入库商品列表
+  """
+  stocks: [Stock]
+  """
+  采购单
+  """
+  purchases: [Purchase]
+  """
+  退货单
+  """
+  resales: [Resale]
+}
+
+"""
+出/入库单状态
+"""
+enum stockStatus {
+  """
+  有效
+  """
+  ACTIVE
+  """
+  无效
+  """
+  INACTIVE
+}
+
+"""
+入库单类型
+"""
+enum stockInType {
+  """
+  采购单入库
+  """
+  PURCHASE
+}
+
+"""
+出库单
+"""
+type StockOut {
+  """
+  出库单ID
+  """
+  id: ID!
+  """
+  状态
+  """
+  status: stockStatus!
+  """
+  批次
+  """
+  batch: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  操作员工
+  """
+  staff: Staff!
+  """
+  出库商品列表
+  """
+  stocks: [Stock]
+  """
+  仓库
+  """
+  repertory: Repertory!
+  """
+  销售单
+  """
+  sales: [Sale]
+  """
+  运输单
+  """
+  transport: Transport
+}
+
+"""
+商品型号
+"""
+type Model {
+  """
+  型号ID
+  """
+  id: ID!
+  """
+  型号名称
+  """
+  name: String! @mock(rule: "@pick(['高压胎', '子午胎', '低压胎'])")
+  """
+  备注
+  """
+  remark: String @mock(rule: "@pick(['普通类型'])")
+  """
+  商品列表
+  """
+  goods: [Goods]
+}
+
+"""
+商品品牌
+"""
+type Brand {
+  """
+  品牌ID
+  """
+  id: ID!
+  """
+  品牌名
+  """
+  name: String! @mock(rule: "@pick(['朝阳', '三角', '米其林', '澳通'])")
+  """
+  备注
+  """
+  remark: String @mock(rule: "@pick(['普通类型'])")
+  """
+  制造厂商
+  """
+  manufacturer: String
+    @mock(rule: "@pick(['成山轮胎制造企业', '昆山轮胎制造企业', '米其林轮胎制造企业', '库珀成山轮胎制造企业'])")
+  """
+  商品列表
+  """
+  goods: [Goods]
+}
+
+"""
+商品
+"""
+type Goods {
+  """
+  商品ID
+  """
+  id: ID!
+  """
+  规格
+  """
+  specification: String!
+    @mock(rule: "@pick(['155/65R13', '215/70R15', '165/70R14', '195/65R15', '185/80R15', '195/90R16'])")
+  """
+  载重指数
+  """
+  loadIndex: Int! @mock(rule: "@integer(50, 100)")
+  """
+  速度级别
+  """
+  speedLevel: String!
+    @mock(
+      rule: "@pick(['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'B', 'C', 'D', 'E', 'F', 'G', 'Q', 'R', 'S', 'T'])"
+    )
+  """
+  花纹
+  """
+  pattern: String! @mock(rule: "@pick(['TR256', 'ST368', 'HK974', 'SG638', 'TK198', 'HF458', 'RG485', 'DA584'])")
+  """
+  单位
+  """
+  unit: String! @mock(rule: "@pick(['条', '套'])")
+  """
+  状态
+  """
+  status: goodsStatus!
+  """
+  品牌
+  """
+  brand: Brand!
+  """
+  型号
+  """
+  model: Model!
+}
+
+"""
+商品状态
+"""
+enum goodsStatus {
+  """
+  在职
+  """
+  ACTIVE
+  """
+  离职
+  """
+  INACTIVE
+}
+
+"""
+员工
+"""
+type Staff {
+  """
+  员工ID
+  """
+  id: ID!
+  """
+  姓名
+  """
+  name: String! @mock(rule: "@cname")
+  """
+  状态
+  """
+  status: staffStatus!
+  """
+  类型
+  """
+  type: staffType!
+  """
+  电话
+  """
+  phone: String! @fake(type: phoneNumber)
+  """
+  电子邮件
+  """
+  email: String! @mock(rule: "@phone")
+  """
+  微信号
+  """
+  wechat: String! @fake(type: phoneNumber)
+  """
+  职位
+  """
+  position: String! @mock(rule: "@pick(['普通员工', '经理'])")
+}
+
+"""
+员工状态
+"""
+enum staffStatus {
+  """
+  在职
+  """
+  ACTIVE
+  """
+  离职
+  """
+  INACTIVE
+}
+
+"""
+员工类型
+"""
+enum staffType {
+  """
+  实习
+  """
+  INTERN
+  """
+  正式员工
+  """
+  REGULAI
+  """
+  外包员工
+  """
+  OUTWORKER
+}
+
+"""
+客户
+"""
+type Customer {
+  """
+  客户ID
+  """
+  id: ID!
+  """
+  名字
+  """
+  name: String! @mock(rule: "@cname")
+  """
+  电话
+  """
+  phone: String @mock(rule: "@phone")
+  """
+  地址
+  """
+  address: String @mock(rule: "@county(true)")
+  """
+  联系人姓名
+  """
+  manageName: String @mock(rule: "@cname")
+  """
+  联系人电话
+  """
+  managePhone: String @mock(rule: "@phone")
+  """
+  状态
+  """
+  status: customerStatus!
+  """
+  类型
+  """
+  type: customerType!
+  """
+  销售单
+  """
+  sales: [Sale]
+  """
+  退货单
+  """
+  resales: [Resale]
+}
+
+"""
+客户类型
+"""
+enum customerType {
+  """
+  VIP客户
+  """
+  VIP
+  """
+  超级VIP客户
+  """
+  SVIP
+  """
+  普通客户
+  """
+  NORMAL
+}
+
+"""
+客户状态
+"""
+enum customerStatus {
+  """
+  启用
+  """
+  ACTIVE
+  """
+  停用
+  """
+  INACTIVE
+}
+"""
+销售项
+"""
+type SaleItem {
+  """
+  销售项ID
+  """
+  id: ID!
+  """
+  商品
+  """
+  goods: Goods!
+  """
+  数量
+  """
+  amount: Int! @mock(rule: "@integer(1, 40)")
+  """
+  价格
+  """
+  price: Float! @mock(rule: "@float(800, 4500, 2, 2)")
+  """
+  状态
+  """
+  status: saleItemStatus!
+  """
+  销售单
+  """
+  sale: Sale!
+}
+"""
+销售项状态
+"""
+enum saleItemStatus {
+  """
+  正常
+  """
+  ACTIVE
+  """
+  停用
+  """
+  INACTIVE
+}
+"""
+销售单
+"""
+type Sale {
+  """
+  销售单ID
+  """
+  id: ID!
+  """
+  销售单单号
+  """
+  batch: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  状态
+  """
+  status: saleStatus!
+  """
+  处理人
+  """
+  staff: Staff!
+  """
+  销售类型
+  """
+  type: saleType!
+  """
+  客户
+  """
+  customer: Customer!
+  """
+  已收款金额
+  """
+  recivedMoney: Float! @mock(rule: "@float(1800, 104500, 2, 2)")
+  """
+  金额
+  """
+  money: Float! @mock(rule: "@float(1800, 104500, 2, 2)")
+  """
+  销售单项
+  """
+  saleItems: [SaleItem]
+  """
+  入库单
+  """
+  stockOut: StockOut
+}
+"""
+销售单状态
+"""
+enum saleStatus {
+  """
+  已建立
+  """
+  BUILDED
+  """
+  已出库
+  """
+  STOCKOUT
+  """
+  无效
+  """
+  INVAILD
+}
+"""
+销售单
+"""
+enum saleType {
+  """
+  零售
+  """
+  RETAIL
+  """
+  批发
+  """
+  WHOLESALE
+}
+"""
+退货单
+"""
+type Resale {
+  """
+  退货单ID
+  """
+  id: ID!
+  """
+  退货批次
+  """
+  batch: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  处理人
+  """
+  staff: Staff!
+  """
+  退货类型
+  """
+  type: resaleType!
+  """
+  退货客户
+  """
+  customer: Customer!
+  """
+  已退款金额
+  """
+  refoudedMoney: Float! @mock(rule: "@float(1800, 104500, 2, 2)")
+  """
+  金额
+  """
+  money: Float! @mock(rule: "@float(1800, 104500, 2, 2)")
+  """
+  状态
+  """
+  status: resaleStatus!
+  """
+  退货项
+  """
+  resaleItems: [ResaleItem]
+  """
+  入库单
+  """
+  stockIn: StockIn
+}
+"""
+退货单状态
+"""
+enum resaleStatus {
+  """
+  已建立
+  """
+  BUILDED
+  """
+  已入库
+  """
+  STOCKIN
+  """
+  无效
+  """
+  INVAILD
+}
+
+"""
+退货单类型
+"""
+enum resaleType {
+  """
+  损坏
+  """
+  DAMAGE
+  """
+  不想要了
+  """
+  DONTWANT
+}
+
+"""
+退货单项
+"""
+type ResaleItem {
+  """
+  退货单项ID
+  """
+  id: ID!
+  """
+  退货商品
+  """
+  goods: Goods!
+  """
+  退货商品项数量
+  """
+  amount: Int! @mock(rule: "@integer(1, 40)")
+  """
+  退货项商品价格
+  """
+  price: Float! @mock(rule: "@float(800, 4500, 2, 2)")
+  """
+  退货项状态
+  """
+  status: resaleItemStatus!
+  """
+  退货单
+  """
+  resale: Resale!
+}
+
+"""
+退货项状态
+"""
+enum resaleItemStatus {
+  """
+  正常
+  """
+  ACTIVE
+  """
+  停用
+  """
+  INACTIVE
+}
+
+"""
+质量问题处理单
+"""
+type Quality {
+  """
+  质量问题处理单ID
+  """
+  id: ID!
+  """
+  受理客户
+  """
+  customer: Customer
+  """
+  处理人
+  """
+  staff: Staff!
+  """
+  备注
+  """
+  remark: String @mock(rule: "@pick(['加急处理', '一般处理'])")
+  """
+  处理状态
+  """
+  status: qualityStatus!
+  """
+  处理类型
+  """
+  type: qualityType!
+  """
+  质量受理产品
+  """
+  qualityItems: [QualityItem]
+}
+
+"""
+质量问题处理单处理状态
+"""
+enum qualityStatus {
+  """
+  已建立
+  """
+  BUILDED
+  """
+  处理中
+  """
+  PROCESSING
+  """
+  结束
+  """
+  END
+}
+
+"""
+质量问题处理单类型
+"""
+enum qualityType {
+  HIGH
+  MIDDLE
+  LOW
+}
+
+"""
+质量受理产品项
+"""
+type QualityItem {
+  """
+  质量受理产品项ID
+  """
+  id: ID!
+  """
+  处理状态
+  """
+  status: qualityItemStatus!
+  """
+  商品
+  """
+  goods: Goods!
+  """
+  质量原因
+  """
+  reason: String @mock(rule: "@pick(['胎面开裂', '断面', '鼓包', '爆胎'])")
+  """
+  备注
+  """
+  reamrk: String @mock(rule: "@pick(['加急处理', '一般处理'])")
+  """
+  类型
+  """
+  type: qualityItemType
+  """
+  唯一商品识别码
+  """
+  goodsCode: String! @mock(rule: "@integer(10000000000, 100000000000)")
+  """
+  质量受理单
+  """
+  quality: Quality!
+  """
+  处理人
+  """
+  staff: [Staff]
+}
+
+"""
+质量受理产品项状态
+"""
+enum qualityItemStatus {
+  """
+  建立
+  """
+  BUILDED
+  """
+  处理中
+  """
+  PROCESSING
+  """
+  理赔
+  """
+  APPROVE
+  """
+  无质量问题
+  """
+  REJECT
+  """
+  结束
+  """
+  END
+}
+
+"""
+质量受理产品项类型
+"""
+enum qualityItemType {
+  """
+  A级损坏
+  """
+  DAMAGE_A
+  """
+  B级损坏
+  """
+  DAMAGE_B
+  """
+  C级损坏
+  """
+  DAMAGE_C
+}
+
+"""
+运输单
+"""
+type Transport {
+  """
+  运输单ID
+  """
+  id: ID!
+  """
+  运输类型
+  """
+  type: transportType
+  """
+  运输状态
+  """
+  status: transportStatus
+  """
+  出库单
+  """
+  stockOut: StockOut
+  """
+  处理人
+  """
+  staff: Staff
+  """
+  地址
+  """
+  address: String @mock(rule: "@county(true)")
+  """
+  物流公司
+  """
+  logistic: Logistic!
+  """
+  运费
+  """
+  money: Float @mock(rule: "@float(20, 600, 2, 2)")
+}
+
+enum transportType {
+  """
+  加急
+  """
+  HIGH
+  """
+  不加急
+  """
+  LOW
+}
+
+enum transportStatus {
+  """
+  正常
+  """
+  NORMAIL
+  """
+  异常
+  """
+  UNNOMAIL
+}
+
+"""
+物流公司
+"""
+type Logistic {
+  """
+  物流公司ID
+  """
+  id: ID!
+  """
+  名称
+  """
+  name: String! @mock(rule: "@pick(['长昆物流有限责任公司', '长武物流有限责任公司', '武汉物流运输有限责任公司'])")
+  """
+  电话
+  """
+  phone: String @mock(rule: "@phone")
+  """
+  地址
+  """
+  address: String @mock(rule: "@county(true)")
+  """
+  类型
+  """
+  type: logisticType!
+  """
+  状态
+  """
+  status: logisticStatus!
+  """
+  联系人姓名
+  """
+  manageName: String @mock(rule: "@cname")
+  """
+  联系人电话
+  """
+  managePhone: String @mock(rule: "@phone")
+  """
+  运输单
+  """
+  transports: [Transport]
+}
+
+enum logisticType {
+  """
+  省内物流公司
+  """
+  PROVINCE
+  """
+  跨省物流公司
+  """
+  INLAND
+}
+
+enum logisticStatus {
+  """
+  正常
+  """
+  ACTIVE
+  """
+  停用
+  """
+  INACTIVE
 }

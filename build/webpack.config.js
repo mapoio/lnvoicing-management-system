@@ -47,6 +47,7 @@ module.exports = {
   stats: { children: false },
   devtool: config.sourceMap,
   devServer: {
+    port: constants.DEV_SERVER_PORT || 8083,
     before: function(app) {
       expressGraphqlMockMiddleware(app, path.join(__dirname, './schema.gql'), '/graphql');
       app.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
