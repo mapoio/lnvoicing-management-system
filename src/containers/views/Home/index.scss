@@ -1,19 +1,19 @@
 @import '_base.scss';
 
 .content {
-    display: flex;
-    padding: $margin-size;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  padding: $margin-size;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-    & > * {
-        display: flex;
-        width: 100%;
-        padding: $margin-size;
-        margin-bottom: $margin-size;
-        flex: 1;
-        background-color: white;
-        overflow-y: auto;
-    }
+  & > * {
+    display: flex;
+    width: 100%;
+    padding: $margin-size;
+    margin-bottom: $margin-size;
+    flex: 1;
+    background-color: white;
+    overflow-y: auto;
+  }
 }

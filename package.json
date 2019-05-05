@@ -13,12 +13,6 @@
     "build:qa": "cross-env APP_ENV=qa npm run build",
     "build:prod": "cross-env APP_ENV=prod npm run build"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
   "keywords": [
     "webpack",
     "typescript",
