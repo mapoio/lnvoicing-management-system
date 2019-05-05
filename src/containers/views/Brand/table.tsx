@@ -112,8 +112,7 @@ const CreateModel = (props: ICreateModel) => {
 const columns: Array<ColumnProps<Brand>> = [
   {
     title: '唯一ID',
-    dataIndex: 'id',
-    width: 400
+    dataIndex: 'id'
   },
   {
     title: '名称',
@@ -156,7 +155,7 @@ export const Tables = () => {
   };
   useEffect(() => {
     if (list.length < 1) {
-      getData(5);
+      getData(500);
     }
     return () => false;
   }, []);

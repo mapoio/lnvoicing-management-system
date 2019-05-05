@@ -5,17 +5,7 @@ const getUser = gql`
   query GETUSER($limit: Int) {
     users(limit: $limit) {
       id
-      userName
-      nickName
-      realName
       email
-      phone
-      academy
-      className
-      studentNumber
-      type
-      status
-      version
     }
   }
 `;

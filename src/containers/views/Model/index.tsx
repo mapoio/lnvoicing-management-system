@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import * as styles from './index.scss';
 import { Tables } from './table';
+import * as styles from '@shared/style/index.scss';
 
 const Model = () => {
   React.useEffect(() => {
@@ -17,7 +17,7 @@ const Model = () => {
         <p>耗材进销存管理系统</p>
         <h2>类型管理</h2>
       </div>
-      <div className={styles.goods}>
+      <div className={styles.tab}>
         <Tables />
       </div>
     </>

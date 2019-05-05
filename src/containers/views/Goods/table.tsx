@@ -135,7 +135,7 @@ export const Tables = () => {
   };
   useEffect(() => {
     if (list.length < 1) {
-      getGoodsData(30);
+      getGoodsData(500);
     }
     return () => false;
   }, []);
