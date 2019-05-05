@@ -1,6 +1,8 @@
 @import '_base.scss';
 
 .sider {
+    box-shadow: 2px 0 6px rgba(118, 119, 119, 0.35);
+
     :global(.ant-layout-sider-children) {
         display: flex;
         flex-direction: column;

@@ -784,11 +784,11 @@ type Goods {
 """
 enum goodsStatus {
   """
-  在职
+  激活
   """
   ACTIVE
   """
-  离职
+  未激活
   """
   INACTIVE
 }

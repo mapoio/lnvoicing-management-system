@@ -7,5 +7,5 @@ import Dashboard from './'
 it('renders the correct avatars', () => {
     const component = enzyme.shallow(<Dashboard />)
     const avatars = component.find(`.${styles.avatars}`)
-    expect(avatars.children().length).toEqual(1)
+    expect(avatars.children().length).toEqual(0)
 })

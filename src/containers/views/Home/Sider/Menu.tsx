@@ -1,179 +1,152 @@
-import * as React from 'react'
-import { observer, inject } from 'mobx-react'
-import { computed } from 'mobx'
-import { Menu, Icon } from 'antd'
-import pathToRegexp from 'path-to-regexp'
+import * as React from 'react';
+import { Menu, Icon } from 'antd';
+import pathToRegexp from 'path-to-regexp';
 
-import * as styles from './index.scss'
-import menu, { IMenu, IMenuInTree } from './../menu'
-import { arrayToTree, queryArray } from '@utils/index'
+import * as styles from './index.scss';
+import menu, { IMenu, IMenuInTree } from './../menu';
+import { arrayToTree, queryArray } from '@utils/index';
+import { hashHistory } from '@store/router';
+import { GlobalStore } from '@store/global';
 
-const { SubMenu } = Menu
+const { SubMenu } = Menu;
+const useGlobalStore = GlobalStore.useStore;
 
-interface IStoreProps {
-    sideBarCollapsed?: boolean
-    sideBarTheme?: IGlobalStore.SideBarTheme
-    navOpenKeys?: string[]
-    setOpenKeys?: (openKeys: string[]) => void
-    userInfo?: IAuthStore.UserInfo
-    routerStore?: RouterStore
-}
+const useMenuState = () => {
+  const { sideBarTheme, sideBarCollapsed, navOpenKeys } = useGlobalStore(s => s);
+  return {
+    sideBarTheme,
+    sideBarCollapsed,
+    navOpenKeys
+  };
+};
 
-@inject(
-    (store: IStore): IStoreProps => {
-        const { routerStore, globalStore, authStore } = store
-        const { userInfo } = authStore
-        const { sideBarTheme, sideBarCollapsed, navOpenKeys, setOpenKeys } = globalStore
-        return {
-            routerStore,
-            userInfo,
-            sideBarTheme,
-            sideBarCollapsed,
-            navOpenKeys,
-            setOpenKeys
-        }
+const SiderMenu = () => {
+  const { sideBarTheme, sideBarCollapsed, navOpenKeys } = useMenuState();
+
+  // 打开的菜单层级记录
+  const levelMap: NumberObject = {};
+
+  const menuTree = arrayToTree<IMenuInTree>(menu, 'id', 'pid');
+
+  const goto = ({ key }: { key: string }) => {
+    const selectedMenu = menu.find(item => String(item.id) === key);
+    if (selectedMenu && selectedMenu.path && selectedMenu.path !== hashHistory.location.pathname) {
+      hashHistory.push(selectedMenu.path);
     }
-)
-@observer
-class SiderMenu extends React.Component<IStoreProps> {
-    // 打开的菜单层级记录
-    private levelMap: NumberObject = {}
+  };
 
-    @computed
-    get currentRoute() {
-        return this.props.routerStore.location.pathname
+  const onOpenChange = (openKeys: string[]): void => {
+    const latestOpenKey = openKeys.find(key => !navOpenKeys.includes(key));
+    const latestCloseKey = navOpenKeys.find(key => !openKeys.includes(key));
+    let nextOpenKeys: string[] = [];
+    if (latestOpenKey) {
+      nextOpenKeys = getAncestorKeys(latestOpenKey).concat(latestOpenKey);
     }
-
-    @computed
-    get menuTree() {
-        return arrayToTree<IMenuInTree>(menu, 'id', 'pid')
+    if (latestCloseKey) {
+      nextOpenKeys = getAncestorKeys(latestCloseKey);
     }
+    GlobalStore.dispatch('setOpenKeys', nextOpenKeys);
+  };
 
-    @computed
+  const menuProps = {
     get menuProps() {
-        const { sideBarCollapsed, navOpenKeys } = this.props
-        return !sideBarCollapsed
-            ? {
-                  onOpenChange: this.onOpenChange,
-                  openKeys: navOpenKeys
-              }
-            : {}
+      return !sideBarCollapsed
+        ? {
+            onOpenChange: onOpenChange,
+            openKeys: navOpenKeys
+          }
+        : {};
     }
+  }.menuProps;
 
-    goto = ({ key }: { key: string }) => {
-        const { history } = this.props.routerStore
-        const selectedMenu = menu.find(item => String(item.id) === key)
-        if (selectedMenu && selectedMenu.path && selectedMenu.path !== this.currentRoute) {
-            history.push(selectedMenu.path)
-        }
+  const getPathArray = (array: IMenu[], current: IMenu): string[] => {
+    const result = [String(current.id)];
+    const getPath = (item: IMenu): void => {
+      if (item && item.pid) {
+        result.unshift(String(item.pid));
+        getPath(queryArray(array, String(item.pid), 'id'));
+      }
+    };
+    getPath(current);
+    return result;
+  };
+
+  // 保持选中
+  const getAncestorKeys = (key: string): string[] => {
+    const map = {};
+    const getParent = (index: string) => {
+      const result = [String(levelMap[index])];
+      if (levelMap[result[0]]) {
+        result.unshift(getParent(result[0])[0]);
+      }
+      return result;
+    };
+    for (const index in levelMap) {
+      if ({}.hasOwnProperty.call(levelMap, index)) {
+        map[index] = getParent(index);
+      }
     }
+    return map[key] || [];
+  };
 
-    onOpenChange = (openKeys: string[]): void => {
-        const { navOpenKeys, setOpenKeys } = this.props
-        const latestOpenKey = openKeys.find(key => !navOpenKeys.includes(key))
-        const latestCloseKey = navOpenKeys.find(key => !openKeys.includes(key))
-        let nextOpenKeys = []
-        if (latestOpenKey) {
-            nextOpenKeys = this.getAncestorKeys(latestOpenKey).concat(latestOpenKey)
-        }
-        if (latestCloseKey) {
-            nextOpenKeys = this.getAncestorKeys(latestCloseKey)
-        }
-        setOpenKeys(nextOpenKeys)
-    }
-
-    getPathArray = (array: IMenu[], current: IMenu): string[] => {
-        const result = [String(current.id)]
-        const getPath = (item: IMenu): void => {
-            if (item && item.pid) {
-                result.unshift(String(item.pid))
-                getPath(queryArray(array, String(item.pid), 'id'))
-            }
-        }
-        getPath(current)
-        return result
-    }
-
-    // 保持选中
-    getAncestorKeys = (key: string): string[] => {
-        const map = {}
-        const getParent = index => {
-            const result = [String(this.levelMap[index])]
-            if (this.levelMap[result[0]]) {
-                result.unshift(getParent(result[0])[0])
-            }
-            return result
-        }
-        for (const index in this.levelMap) {
-            if ({}.hasOwnProperty.call(this.levelMap, index)) {
-                map[index] = getParent(index)
-            }
-        }
-        return map[key] || []
-    }
-
-    // 递归生成菜单
-    getMenus = (menuTree: IMenuInTree[]) => {
-        return menuTree.map(item => {
-            if (item.children) {
-                if (item.pid) {
-                    this.levelMap[item.id] = item.pid
-                }
-                return (
-                    <SubMenu
-                        key={String(item.id)}
-                        title={
-                            <span>
-                                {item.icon && <Icon type={item.icon} />}
-                                <span>{item.title}</span>
-                            </span>
-                        }
-                    >
-                        {this.getMenus(item.children)}
-                    </SubMenu>
-                )
-            }
-            return (
-                <Menu.Item key={String(item.id)}>
-                    {item.icon && <Icon type={item.icon} />}
-                    <span>{item.title}</span>
-                </Menu.Item>
-            )
-        })
-    }
-
-    render() {
-        this.levelMap = {}
-        const { sideBarTheme } = this.props
-        const menuItems = this.getMenus(this.menuTree)
-        // 寻找选中路由
-        let currentMenu: IMenu = null
-        for (const item of menu) {
-            if (item.path && pathToRegexp(item.path).exec(this.currentRoute)) {
-                currentMenu = item
-                break
-            }
-        }
-        let selectedKeys: string[] = null
-        if (currentMenu) {
-            selectedKeys = this.getPathArray(menu, currentMenu)
-        }
-        if (!selectedKeys) {
-            selectedKeys = ['1']
+  // 递归生成菜单
+  const getMenus = (menuTrees: IMenuInTree[]) => {
+    return menuTrees.map(item => {
+      if (item.children) {
+        if (item.pid) {
+          levelMap[item.id] = item.pid;
         }
         return (
-            <Menu
-                className={styles.menu}
-                theme={sideBarTheme}
-                mode="inline"
-                selectedKeys={selectedKeys}
-                onClick={this.goto}
-                {...this.menuProps}
-            >
-                {menuItems}
-            </Menu>
-        )
-    }
-}
+          <SubMenu
+            key={String(item.id)}
+            title={
+              <span>
+                {item.icon && <Icon type={item.icon} />}
+                <span>{item.title}</span>
+              </span>
+            }
+          >
+            {getMenus(item.children)}
+          </SubMenu>
+        );
+      }
+      return (
+        <Menu.Item key={String(item.id)}>
+          {item.icon && <Icon type={item.icon} />}
+          <span>{item.title}</span>
+        </Menu.Item>
+      );
+    });
+  };
 
-export default SiderMenu
+  const menuItems = getMenus(menuTree);
+  // 寻找选中路由
+  let currentMenu: IMenu = null;
+  for (const item of menu) {
+    if (item.path && pathToRegexp(item.path).exec(hashHistory.location.pathname)) {
+      currentMenu = item;
+      break;
+    }
+  }
+  let selectedKeys: string[] = null;
+  if (currentMenu) {
+    selectedKeys = getPathArray(menu, currentMenu);
+  }
+  if (!selectedKeys) {
+    selectedKeys = ['1'];
+  }
+  return (
+    <Menu
+      className={styles.menu}
+      theme={sideBarTheme}
+      mode="inline"
+      selectedKeys={selectedKeys}
+      onClick={goto}
+      {...menuProps}
+    >
+      {menuItems}
+    </Menu>
+  );
+};
+
+export default SiderMenu;

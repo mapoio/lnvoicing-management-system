@@ -2,7 +2,7 @@
 
 .content {
     display: flex;
-    padding: 15px;
+    padding: $margin-size;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -10,7 +10,8 @@
     & > * {
         display: flex;
         width: 100%;
-        padding: 15px;
+        padding: $margin-size;
+        margin-bottom: $margin-size;
         flex: 1;
         background-color: white;
         overflow-y: auto;

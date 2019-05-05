@@ -1651,6 +1651,13 @@
   resolved "http://registry.npm.taobao.org/@types/unist/download/@types/unist-2.0.3.tgz#9c088679876f374eb5983f150d4787aa6fb32d7e"
   integrity sha1-nAiGeYdvN061mD8VDUeHqm+zLX4=
 
+"@types/uuid@^3.4.4":
+  version "3.4.4"
+  resolved "https://registry.npm.taobao.org/@types/uuid/download/@types/uuid-3.4.4.tgz#7af69360fa65ef0decb41fd150bf4ca5c0cefdf5"
+  integrity sha1-evaTYPpl7w3stB/RUL9MpcDO/fU=
+  dependencies:
+    "@types/node" "*"
+
 "@types/vfile-message@*":
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/@types/vfile-message/download/@types/vfile-message-1.0.1.tgz#e1e9895cc6b36c462d4244e64e6d0b6eaf65355a"
@@ -3271,6 +3278,15 @@ clone-deep@^2.0.1:
     is-plain-object "^2.0.4"
     kind-of "^6.0.0"
     shallow-clone "^1.0.0"
+
+clone-deep@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npm.taobao.org/clone-deep/download/clone-deep-4.0.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fclone-deep%2Fdownload%2Fclone-deep-4.0.1.tgz#c19fd9bdbbf85942b4fd979c84dcf7d5f07c2387"
+  integrity sha1-wZ/Zvbv4WUK0/ZechNz31fB8I4c=
+  dependencies:
+    is-plain-object "^2.0.4"
+    kind-of "^6.0.2"
+    shallow-clone "^3.0.0"
 
 clone-regexp@^1.0.0:
   version "1.0.1"
@@ -6041,11 +6057,6 @@ image-size@~0.5.0:
   version "0.5.5"
   resolved "http://registry.npm.taobao.org/image-size/download/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
   integrity sha1-Cd/Uq50g4p6xw+gLiZA3jfnjy5w=
-
-immer@^1.7.2:
-  version "1.12.1"
-  resolved "http://registry.npm.taobao.org/immer/download/immer-1.12.1.tgz#40c6e5b292c00560836c2993bda3a24379d466f5"
-  integrity sha1-QMblspLABWCDbCmTvaOiQ3nUZvU=
 
 immer@^2.1.0:
   version "2.1.5"
@@ -10537,13 +10548,14 @@ react-slick@~0.23.2:
     prettier "^1.14.3"
     resize-observer-polyfill "^1.5.0"
 
-react-state-manage@^2.1.2:
-  version "2.1.2"
-  resolved "http://registry.npm.taobao.org/react-state-manage/download/react-state-manage-2.1.2.tgz#3854b3984d1a4bd69a6aed5ddbcdfb8a4b09e2c1"
-  integrity sha1-OFSzmE0aS9aaau1d2837iksJ4sE=
+react-state-manage@1.11.0:
+  version "1.11.0"
+  resolved "https://registry.npm.taobao.org/react-state-manage/download/react-state-manage-1.11.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-state-manage%2Fdownload%2Freact-state-manage-1.11.0.tgz#ac02b28891e541b1a00e0f3bd62e6b873a0da8f5"
+  integrity sha1-rAKyiJHlQbGgDg871i5rhzoNqPU=
   dependencies:
+    clone-deep "^4.0.1"
     fast-deep-equal "^2.0.1"
-    immer "^1.7.2"
+    immer "^2.1.0"
 
 react-test-renderer@^16.0.0-0:
   version "16.8.6"
@@ -11395,6 +11407,13 @@ shallow-clone@^1.0.0:
     is-extendable "^0.1.1"
     kind-of "^5.0.0"
     mixin-object "^2.0.1"
+
+shallow-clone@^3.0.0:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/shallow-clone/download/shallow-clone-3.0.1.tgz#8f2981ad92531f55035b01fb230769a40e02efa3"
+  integrity sha1-jymBrZJTH1UDWwH7IwdppA4C76M=
+  dependencies:
+    kind-of "^6.0.2"
 
 shallow-equal@^1.0.0:
   version "1.1.0"
@@ -13151,9 +13170,9 @@ webpack-dev-server@^3.3.1:
     webpack-log "^2.0.0"
     yargs "12.0.5"
 
-webpack-graphql-mock@0.0.3:
+webpack-graphql-mock@0.0.2:
   version "0.0.2"
-  resolved "http://registry.npm.taobao.org/webpack-graphql-mock/download/webpack-graphql-mock-0.0.2.tgz#9f65c1c5d9e037e6f174e2ff073ff23bbf04ccd3"
+  resolved "https://registry.npm.taobao.org/webpack-graphql-mock/download/webpack-graphql-mock-0.0.2.tgz#9f65c1c5d9e037e6f174e2ff073ff23bbf04ccd3"
   integrity sha1-n2XBxdngN+bxdOL/Bz/yO78EzNM=
   dependencies:
     "@apollographql/graphql-playground-html" "^1.6.6"

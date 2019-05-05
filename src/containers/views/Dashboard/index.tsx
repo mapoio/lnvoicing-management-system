@@ -5,7 +5,7 @@ import { Tables } from './table';
 
 function Dashboard() {
   React.useEffect(() => {
-    const title = 'oosh!';
+    const title = '耗材进销存管理系统';
     document.title = title;
     return () => {
       document.title = 'test';

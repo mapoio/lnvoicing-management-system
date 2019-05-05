@@ -1,0 +1,19 @@
+@import '_base.scss';
+
+.tabHead {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    width: calc(100% + #{$margin-size * 2});
+    margin-top: $margin-size * -1;
+    box-shadow: inset 1px 0 4px rgba(4, 21, 37, 0.22);
+    padding-left: $margin-size * 2;
+
+    & > p {
+        color: $gray-color;
+    }
+}
+
+.goods {
+    flex-direction: column;
+}

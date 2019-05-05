@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { Table, Button, Badge, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Table, Button, Badge, Tag, message } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { UserStore } from '../../../store/user';
+import { UserStore } from '@store/user';
 import { IUser, UserStatus, UserType } from '@services/gql/user';
 
 const { useStore, dispatch } = UserStore;
@@ -89,28 +89,36 @@ const columns: Array<ColumnProps<IUser>> = [
 ];
 
 export const Tables = () => {
-  const { loadding, list } = useStore(s => s);
+  const list = useStore(s => s.list);
+  const [loading, setLoding] = useState(false);
+  const getUserData = async () => {
+    setLoding(true);
+    try {
+      await dispatch('getUserData');
+      message.success('获取用户数据成功');
+    } catch (error) {
+      message.error(error.message);
+    }
+    setTimeout(() => {
+      setLoding(false);
+    }, 1500);
+  };
   useEffect(() => {
     if (list.length < 1) {
-      dispatch('getUserData');
+      getUserData();
     }
+    return () => false;
   }, []);
   return (
     <div>
-      <Button
-        onClick={() => {
-          dispatch('getUserData');
-        }}
-        loading={loadding}
-        type="primary"
-      >
+      <Button onClick={getUserData} loading={loading} type="primary">
         刷新
       </Button>
       <Table<IUser>
         columns={columns}
         dataSource={list}
         rowKey={r => r.id}
-        loading={loadding}
+        loading={loading}
         pagination={{ showSizeChanger: true }}
       />
     </div>

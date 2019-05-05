@@ -1,96 +1,62 @@
 import * as React from 'react';
-import { inject, observer } from 'mobx-react';
-import { observable, runInAction } from 'mobx';
 import { Form, Icon, Input, Button } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
 import { hot } from 'react-hot-loader';
+import { AuthStore } from '@store/auth';
 
 import * as styles from './index.scss';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 
 const FormItem = Form.Item;
+const useAuthStore = AuthStore.useStore;
+const useState = React.useState;
 
-interface IStoreProps {
-  routerStore?: RouterStore;
-  login?: (data: IAuthStore.LoginParams) => Promise<any>;
-}
-
-@inject(
-  (store: IStore): IStoreProps => {
-    const { routerStore, authStore } = store;
-    const { login } = authStore;
-    return {
-      routerStore,
-      login
-    };
-  }
-)
-@observer
-class Login extends React.Component<IStoreProps & FormComponentProps> {
-  @observable
-  private loading: boolean = false;
-
-  submit = (e: React.FormEvent<any>): void => {
+const Login = (form: WrappedFormUtils) => {
+  const loadding = useAuthStore(s => s.loadding);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const submit = (e: React.FormEvent<any>): void => {
     e.preventDefault();
-    this.props.form.validateFields(
-      async (err, values): Promise<any> => {
-        if (!err) {
-          runInAction('SHOW_LOGIN_LOADING', () => {
-            this.loading = true;
-          });
-          await this.props.login(values);
-          runInAction('HIDE_LOGIN_LOADING', () => {
-            this.loading = false;
-          });
-        }
-      }
-    );
+    AuthStore.dispatch('login', {
+      account: username,
+      password
+    });
   };
 
-  render() {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <div className={styles.login}>
-        <Form onSubmit={this.submit} className={styles.form}>
-          <div className={styles.logoBox}>
-            <Icon type="ant-design" />
+  return (
+    <div className={styles.login}>
+      <Form onSubmit={submit} className={styles.form}>
+        <div className={styles.logoBox}>
+          <Icon type="ant-design" />
+        </div>
+        <FormItem hasFeedback>
+          <Input
+            prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            placeholder="account"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+          />
+        </FormItem>
+        <FormItem hasFeedback>
+          <Input
+            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </FormItem>
+        <FormItem>
+          <div className={styles.tips}>
+            <span>username: admin</span>
+            <span>password: admin</span>
           </div>
-          <FormItem hasFeedback>
-            {getFieldDecorator('account', {
-              rules: [
-                {
-                  required: true
-                }
-              ]
-            })(<Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="account" />)}
-          </FormItem>
-          <FormItem hasFeedback>
-            {getFieldDecorator('password', {
-              rules: [
-                {
-                  required: true
-                }
-              ]
-            })(
-              <Input
-                prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                type="password"
-                placeholder="password"
-              />
-            )}
-          </FormItem>
-          <FormItem>
-            <div className={styles.tips}>
-              <span>username: admin</span>
-              <span>password: admin</span>
-            </div>
-            <Button type="primary" htmlType="submit" block loading={this.loading}>
-              login
-            </Button>
-          </FormItem>
-        </Form>
-      </div>
-    );
-  }
-}
+          <Button type="primary" htmlType="submit" block loading={loadding}>
+            login
+          </Button>
+        </FormItem>
+      </Form>
+    </div>
+  );
+};
 
-export default hot(module)(Form.create<{}>()(Login));
+export default hot(module)(Login);

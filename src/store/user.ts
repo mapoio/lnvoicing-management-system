@@ -1,4 +1,4 @@
-import { createStore } from 'stamen';
+import { createStore } from 'react-state-manage';
 import { GetUser, IUser } from '@services/gql/user';
 
 interface IState {
@@ -27,10 +27,8 @@ const { useStore, dispatch } = createStore({
     async getUserData(limit: number) {
       dispatch('setLoadding', true);
       const data = await api.send({ limit: limit || 5 });
-      setTimeout(() => {
-        dispatch('updateList', data.data.users);
-        dispatch('setLoadding', false);
-      }, 1500);
+      dispatch('updateList', data.data.users);
+      dispatch('setLoadding', false);
     }
   }
 });

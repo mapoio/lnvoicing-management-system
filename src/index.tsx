@@ -3,29 +3,26 @@ import './index.scss';
 // import '@babel/polyfill';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'mobx-react';
-import { configure } from 'mobx';
-import { createHashHistory } from 'history';
-import { syncHistoryWithStore } from 'mobx-react-router';
+import { hashHistory } from '@store/router';
 import { Router } from 'react-router-dom';
+import storeManage from 'react-state-manage';
 
 import registerServiceWorker from './sw';
 import AppRouter from '@shared/App';
-import * as store from './store';
+import { reactStorelogger, reactStoreUpdatelogger } from '@utils/logger';
+
+storeManage.init({
+  beforeDispatchs: [reactStorelogger],
+  beforeUpdates: [reactStoreUpdatelogger]
+});
 
 registerServiceWorker();
-configure({ enforceActions: 'observed' });
-
-const hashHistory = createHashHistory();
-const history = syncHistoryWithStore(hashHistory, store.routerStore);
 
 const render = Component => {
   const element = (
-    <Provider {...store}>
-      <Router history={history}>
-        <Component />
-      </Router>
-    </Provider>
+    <Router history={hashHistory}>
+      <Component />
+    </Router>
   );
   ReactDOM.render(element, document.getElementById('app') as HTMLElement);
 };
