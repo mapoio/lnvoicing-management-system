@@ -1,19 +1,19 @@
 import React from 'react';
 import { Button, Input, Modal, Form } from 'antd';
-import { ModelStore } from '@store/model';
+import { BrandStore } from '@store/brand';
 import { formItemLayout } from '@constants/index';
-import { Model } from '@services/gql/model';
+import { Brand } from '@services/gql/brand';
 import { useCreateOrUpdateState } from '@components/UseStates';
 
-const { dispatch } = ModelStore;
+const { dispatch } = BrandStore;
 
-interface IUpdateModel {
+interface IUpdateBrand {
   show: boolean;
   onShow: (show: boolean) => void;
-  data: Model;
+  data: Brand;
 }
 
-export const UpdateModal = (props: IUpdateModel) => {
+export const UpdateModal = (props: IUpdateBrand) => {
   const { data, setData, loading, setLoading } = useCreateOrUpdateState(props.data);
   const onCancel = () => {
     setData(props.data);
@@ -40,21 +40,28 @@ export const UpdateModal = (props: IUpdateModel) => {
   };
   const FormItem = Form.Item;
   return (
-    <Modal title="修改商品类型" visible={props.show} footer={<FooterButton />} onCancel={onCancel}>
+    <Modal title="修改商品品牌" visible={props.show} footer={<FooterButton />} onCancel={onCancel}>
       <Form {...formItemLayout}>
         <FormItem label="唯一ID" required>
           <span>{data.id}</span>
         </FormItem>
-        <FormItem label="商品类型名称" required>
+        <FormItem label="商品品牌名称" required>
           <Input
-            placeholder="输入商品类型名称"
+            placeholder="输入商品品牌名称"
             value={data.name}
             onChange={e => setData(Object.assign({}, data, { name: e.target.value }))}
           />
         </FormItem>
-        <FormItem label="商品类型备注" required>
+        <FormItem label="商品品牌制造商" required>
           <Input
-            placeholder="输入商品类型备注"
+            placeholder="输入商品品牌制造商"
+            value={data.manufacturer}
+            onChange={e => setData(Object.assign({}, data, { manufacturer: e.target.value }))}
+          />
+        </FormItem>
+        <FormItem label="商品品牌备注" required>
+          <Input
+            placeholder="输入商品品牌备注"
             value={data.remark}
             onChange={e => setData(Object.assign({}, data, { remark: e.target.value }))}
           />

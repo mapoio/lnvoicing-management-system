@@ -28,7 +28,7 @@ const { useStore, dispatch } = createStore({
         state.list.splice(index, 1);
       }
     },
-    updateModel(state, payload: Model) {
+    updateOne(state, payload: Model) {
       const index = state.list.findIndex(item => item.id === payload.id);
       if (index > -1) {
         state.list[index] = payload;
@@ -54,7 +54,7 @@ const { useStore, dispatch } = createStore({
     async update(item: Model) {
       const { id, created_at, updated_at, ...data } = item;
       const res = handleGraphQLError(await UPDATE.send({ data, id }));
-      dispatch('updateModel', res.data.updateModel.model);
+      dispatch('updateOne', res.data.updateModel.model);
     }
   }
 });
