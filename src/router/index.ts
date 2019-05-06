@@ -24,11 +24,6 @@ export const menu: IMenu[] = [
     exact: true
   },
   {
-    id: 2,
-    title: 'ECharts',
-    icon: 'bar-chart'
-  },
-  {
     id: 3,
     title: '商品管理',
     icon: 'shopping-cart'
@@ -61,34 +56,11 @@ export const menu: IMenu[] = [
     exact: true
   },
   {
-    id: 21,
-    pid: 2,
-    title: 'Line-Chart',
-    icon: 'line-chart'
-  },
-  {
-    id: 212,
-    pid: 21,
-    path: '/area-stack',
-    title: 'Area-Stack',
-    component: 'ChartAreaStack',
-    exact: true
-  },
-  {
-    id: 211,
-    pid: 21,
-    path: '/line-smooth',
-    title: 'Line-Smooth',
-    component: 'ChartLineSmooth',
-    exact: true
-  },
-  {
-    id: 22,
-    pid: 2,
-    path: '/pie-chart',
-    title: 'Pie-Chart',
-    icon: 'pie-chart',
-    component: 'ChartPie',
+    id: 4,
+    path: '/customer',
+    title: '客户管理',
+    icon: 'user',
+    component: 'Customer',
     exact: true
   }
 ];

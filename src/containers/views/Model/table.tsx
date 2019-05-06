@@ -32,7 +32,7 @@ const OptionCol = (props: IOptionColProps) => {
     <>
       <UpdateModal show={updateShow} onShow={setUpdateShow} data={record} />
       <Tooltip title="修改本条商品">
-        <Button icon="edit" type="primary" shape="circle" onClick={onUpdate} />
+        <Button icon="edit" type="default" shape="circle" onClick={onUpdate} />
       </Tooltip>
       <Tooltip title="删除本条商品">
         <Button icon="delete" type="danger" shape="circle" loading={deleteLoading} onClick={onDelete} />

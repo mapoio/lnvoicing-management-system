@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tooltip, Input, Row, Col } from 'antd';
+import { Table, Button, message, Tooltip, Input, Row, Col, Divider, Tag, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { BrandStore } from '@store/brand';
-import { Brand } from '@services/gql/brand';
+import { CustomerStore } from '@store/customer';
+import { Customer, customerType, customerStatus } from '@services/gql/customer';
 import { CreateModal } from './create';
 import { UpdateModal } from './update';
 import * as styles from '@shared/style/index.scss';
 
-const { useStore, dispatch } = BrandStore;
+const { useStore, dispatch } = CustomerStore;
+
+type adtdType = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
 interface IOptionColProps {
-  record: Brand;
+  record: Customer;
 }
 
 const OptionCol = (props: IOptionColProps) => {
@@ -41,7 +43,7 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Brand>> = [
+const columns: Array<ColumnProps<Customer>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
@@ -51,12 +53,60 @@ const columns: Array<ColumnProps<Brand>> = [
     dataIndex: 'name'
   },
   {
-    title: '制造商',
-    dataIndex: 'manufacturer'
+    title: '电话',
+    dataIndex: 'phone'
   },
   {
-    title: '备注',
-    dataIndex: 'remark'
+    title: '地址',
+    dataIndex: 'address'
+  },
+  {
+    title: '负责人姓名',
+    dataIndex: 'manageName'
+  },
+  {
+    title: '负责人电话',
+    dataIndex: 'managePhone'
+  },
+  {
+    title: '客户类型',
+    dataIndex: 'type',
+    render: (type: customerType) => {
+      const customerTypeBox = {
+        [customerType.NORMAL]: {
+          text: '普通用户',
+          color: '#87d068'
+        },
+        [customerType.VIP]: {
+          text: 'VIP',
+          color: '#108ee9'
+        },
+        [customerType.SVIP]: {
+          text: 'SVIP',
+          color: '#f50'
+        }
+      }[type];
+      if (!customerTypeBox) {
+        return <Tag color="red">未知类型</Tag>;
+      }
+      return <Tag color={customerTypeBox.color}>{customerTypeBox.text}</Tag>;
+    }
+  },
+  {
+    title: '状态',
+    dataIndex: 'status',
+    render: (status: customerStatus) => {
+      const statusColor = {
+        [customerStatus.ACTIVE]: 'success',
+        [customerStatus.INACTIVE]: 'error'
+      };
+      const statusText = {
+        [customerStatus.ACTIVE]: '激活',
+        [customerStatus.INACTIVE]: '暂停'
+      };
+      const color = statusColor[status] as adtdType;
+      return <Badge status={color} text={statusText[status]} />;
+    }
   },
   {
     title: '操作',
@@ -96,13 +146,13 @@ export const Tables = () => {
       <CreateModal show={showCreate} onShow={setShowCreate} />
       <Row gutter={12}>
         <Col span={8}>
-          <Input placeholder="输入品牌名称搜索" value={search} onChange={onChangeSearch} />
+          <Input placeholder="输入名称搜索" value={search} onChange={onChangeSearch} />
         </Col>
         <Button icon="plus" type="primary" onClick={onShowCreate}>
           新建
         </Button>
       </Row>
-      <Table<Brand>
+      <Table<Customer>
         columns={columns}
         dataSource={list.filter(item => item.name.includes(search))}
         rowKey={r => `${r.id}`}
