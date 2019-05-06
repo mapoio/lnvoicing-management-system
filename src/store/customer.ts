@@ -22,6 +22,12 @@ const DELETE = new DeleteCustomer();
 const CREATE = new CreateCustomer();
 const UPDATE = new UpdateCustomer();
 
+const searchItem = <T extends any[]>(id: number, source: T) => {
+  const index = source.findIndex(item => item.id === id);
+  const data = source[index];
+  return { index, data };
+};
+
 const { useStore, dispatch } = createStore({
   state: initState,
   reducers: {
@@ -30,13 +36,13 @@ const { useStore, dispatch } = createStore({
       state.list = state.list.concat(list);
     },
     delete(state, payload: number) {
-      const index = state.list.findIndex(item => item.id === payload);
+      const index = searchItem(payload, state.list).index;
       if (index > -1) {
         state.list.splice(index, 1);
       }
     },
     updateOne(state, payload: Customer) {
-      const index = state.list.findIndex(item => item.id === payload.id);
+      const index = searchItem(payload.id, state.list).index;
       if (index > -1) {
         state.list[index] = payload;
       }

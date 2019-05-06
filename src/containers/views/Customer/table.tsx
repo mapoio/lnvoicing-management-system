@@ -18,6 +18,7 @@ interface IOptionColProps {
 const OptionCol = (props: IOptionColProps) => {
   const record = props.record;
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [activeLoading, setActiveLoading] = useState(false);
   const [updateShow, setUpdateShow] = useState(false);
   const onDelete = async () => {
     setDeleteLoading(true);
@@ -30,9 +31,34 @@ const OptionCol = (props: IOptionColProps) => {
     }
   };
   const onUpdate = async () => setUpdateShow(true);
+  const activeShow = {
+    [customerStatus.ACTIVE]: {
+      title: '停用本条数据',
+      icon: 'stop'
+    },
+    [customerStatus.INACTIVE]: {
+      title: '启用本条数据',
+      icon: 'check'
+    }
+  }[record.status];
+  const onChangeActive = async () => {
+    const newData = { ...record };
+    newData.status = record.status === customerStatus.ACTIVE ? customerStatus.INACTIVE : customerStatus.ACTIVE;
+    setActiveLoading(true);
+    try {
+      await dispatch('update', newData);
+      message.success('成功' + activeShow.title);
+    } catch (e) {
+      message.error(activeShow.title + '失败！');
+    }
+    setActiveLoading(false);
+  };
   return (
     <>
       <UpdateModal show={updateShow} onShow={setUpdateShow} data={record} />
+      <Tooltip title={activeShow.title}>
+        <Button icon={activeShow.icon} type="default" shape="circle" loading={activeLoading} onClick={onChangeActive} />
+      </Tooltip>
       <Tooltip title="修改本条商品">
         <Button icon="edit" type="default" shape="circle" onClick={onUpdate} />
       </Tooltip>
@@ -43,6 +69,7 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
+// TODO: 增加筛选条件，在表格中增加
 const columns: Array<ColumnProps<Customer>> = [
   {
     title: '唯一ID',

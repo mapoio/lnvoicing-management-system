@@ -50,7 +50,7 @@ We do not use any mock tools(Anyway, you can use the data format from server res
 -   create component folder by `customaddcomponents` which is added to npm script `npm run add`
 -   use husky{pre-commit/commit-msg} hooks
 
-## TODO
+## TODS
 
 -   config menu by user with permission
 

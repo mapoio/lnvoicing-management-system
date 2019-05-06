@@ -126,8 +126,6 @@ type Mutation {
   hello: String
 }
 
-# TODO: 划分QUery中的查询
-
 """
 根查询
 """

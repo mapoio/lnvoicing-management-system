@@ -17,7 +17,7 @@ const StatusSelect = (props: IStatusProps) => {
     [customerStatus.ACTIVE]: '激活'
   };
   return (
-    <Select defaultValue={statusOption[status] || 'ACTIVE'} onChange={setStatus}>
+    <Select value={statusOption[status] || 'ACTIVE'} onChange={setStatus} disabled={!!statusOption[status]}>
       {Object.keys(statusOption).map(key => (
         <Option key={key} value={key}>
           {statusOption[key]}
@@ -40,7 +40,7 @@ const TypeSelect = (props: ITypeProps) => {
     [customerType.SVIP]: 'SVIP'
   };
   return (
-    <Select defaultValue={typeOption[type] || 'NORMAL'} onChange={setType}>
+    <Select value={typeOption[type] || 'NORMAL'} onChange={setType}>
       {Object.keys(typeOption).map(key => (
         <Option key={key} value={key}>
           {typeOption[key]}
