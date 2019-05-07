@@ -1,23 +1,21 @@
 import React from 'react';
 import { Button, Modal, Form } from 'antd';
-import { CustomerStore } from '@store/customer';
+import { GoodStore } from '@store/good';
 import { useCreateOrUpdateState } from '@components/UseStates';
-import { CustomerCoreData } from '@services/gql/customer';
+import { GoodCoreData } from '@services/gql/good';
 import { CreateOrUpdateForm } from './form';
 import { formItemLayout } from '@constants/index';
 
-const { dispatch } = CustomerStore;
+const { dispatch } = GoodStore;
 
-interface ICreateCustomer {
+interface ICreateGood {
   show: boolean;
   onShow: (show: boolean) => void;
 }
 
-export const CreateModal = (props: ICreateCustomer) => {
-  const initData: Partial<CustomerCoreData> = {
-    name: '',
-    phone: undefined,
-    address: ''
+export const CreateModal = (props: ICreateGood) => {
+  const initData: Partial<GoodCoreData> = {
+    unit: ''
   };
   const { data, setData, loading, setLoading } = useCreateOrUpdateState(initData);
   const onCancel = () => {
@@ -26,7 +24,7 @@ export const CreateModal = (props: ICreateCustomer) => {
   };
   const onOK = async () => {
     setLoading(true);
-    await dispatch('create', data);
+    await dispatch('create', Object.assign({}, data, { model: data.model.id, brand: data.brand.id }));
     setData(initData);
     props.onShow(false);
     setLoading(false);
@@ -38,13 +36,13 @@ export const CreateModal = (props: ICreateCustomer) => {
           取消创建
         </Button>
         <Button type="primary" onClick={onOK} loading={loading}>
-          创建客户
+          创建商品
         </Button>
       </div>
     );
   };
   return (
-    <Modal title="创建客户" visible={props.show} footer={<FooterButton />} onCancel={onCancel}>
+    <Modal title="创建商品" visible={props.show} footer={<FooterButton />} onCancel={onCancel}>
       <Form {...formItemLayout}>
         <CreateOrUpdateForm data={data} setData={setData} />
       </Form>

@@ -19,8 +19,7 @@ const { useStore, dispatch } = createStore({
   state: initState,
   reducers: {
     updateList(state, payload: Brand[]) {
-      const list = payload || [];
-      state.list = state.list.concat(list);
+      state.list = state.list = payload || [];
     },
     delete(state, payload: number) {
       const index = state.list.findIndex(item => item.id === payload);

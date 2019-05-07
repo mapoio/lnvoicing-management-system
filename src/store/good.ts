@@ -1,61 +1,67 @@
 import { createStore } from 'react-state-manage';
-import { GetModels, Model, DeleteModel, CreateModelParamsData, CreateModel, UpdateModel } from '@services/gql/model';
+import { GetGoods, Good, DeleteGood, CreateGoodParamsData, CreateGood, UpdateGood } from '@services/gql/good';
 import { handleGraphQLError } from '@utils/index';
 
 interface IState {
-  list: Model[];
+  list: Good[];
 }
 
 const initState: IState = {
   list: []
 };
 
-const LIST = new GetModels();
-const DELETE = new DeleteModel();
-const CREATE = new CreateModel();
-const UPDATE = new UpdateModel();
+const LIST = new GetGoods();
+const DELETE = new DeleteGood();
+const CREATE = new CreateGood();
+const UPDATE = new UpdateGood();
+
+const searchItem = <T extends any[]>(id: number, source: T) => {
+  const index = source.findIndex(item => item.id === id);
+  const data = source[index];
+  return { index, data };
+};
 
 const { useStore, dispatch } = createStore({
   state: initState,
   reducers: {
-    updateList(state, payload: Model[]) {
+    updateList(state, payload: Good[]) {
       state.list = state.list = payload || [];
     },
     delete(state, payload: number) {
-      const index = state.list.findIndex(item => item.id === payload);
+      const index = searchItem(payload, state.list).index;
       if (index > -1) {
         state.list.splice(index, 1);
       }
     },
-    updateOne(state, payload: Model) {
-      const index = state.list.findIndex(item => item.id === payload.id);
+    updateOne(state, payload: Good) {
+      const index = searchItem(payload.id, state.list).index;
       if (index > -1) {
         state.list[index] = payload;
       }
     },
-    createOne(state, payload: Model) {
+    createOne(state, payload: Good) {
       state.list.push(payload);
     }
   },
   effects: {
     async getList(limit: number) {
       const data = handleGraphQLError(await LIST.send({ limit: limit || 5 }));
-      dispatch('updateList', data.data.models);
+      dispatch('updateList', data.data.goods);
     },
     async deleteSingle(id: number) {
       handleGraphQLError(await DELETE.send({ id }));
       dispatch('delete', id);
     },
-    async create(data: CreateModelParamsData) {
+    async create(data: CreateGoodParamsData) {
       const res = handleGraphQLError(await CREATE.send({ data }));
-      dispatch('createOne', res.data.createModel.model);
+      dispatch('createOne', res.data.createGoods.good);
     },
-    async update(item: Model) {
+    async update(item: Good) {
       const { id, created_at, updated_at, ...data } = item;
       const res = handleGraphQLError(await UPDATE.send({ data, id }));
-      dispatch('updateOne', res.data.updateModel.model);
+      dispatch('updateOne', res.data.updateGoods.good);
     }
   }
 });
 
-export const ModelStore = { useStore, dispatch };
+export const GoodStore = { useStore, dispatch };

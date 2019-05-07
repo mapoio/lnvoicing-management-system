@@ -97,6 +97,9 @@ export const Tables = () => {
         <Button icon="plus" type="primary" onClick={onShowCreate}>
           新建
         </Button>
+        <Button icon="sync" type="default" loading={loading} onClick={() => getData(500)}>
+          刷新
+        </Button>
       </Row>
       <Table<Model>
         columns={columns}

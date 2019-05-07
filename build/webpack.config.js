@@ -1,5 +1,6 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const expressGraphqlMockMiddleware = require('webpack-graphql-mock').expressGraphqlMockMiddleware;
+const proxy = require('http-proxy-middleware');
 const voyagerMiddleware = require('graphql-voyager/middleware').express;
 const path = require('path');
 
@@ -49,7 +50,9 @@ module.exports = {
   devServer: {
     port: constants.DEV_SERVER_PORT || 8083,
     before: function(app) {
-      expressGraphqlMockMiddleware(app, path.join(__dirname, './schema.gql'), '/graphql');
+      // expressGraphqlMockMiddleware(app, path.join(__dirname, './schema.gql'), '/graphql');
+      // connnect real GraphQL End Point
+      app.use(proxy('/graphql', { target: 'http://localhost:1337' }));
       app.use('/voyager', voyagerMiddleware({ endpointUrl: '/graphql' }));
     }
   }

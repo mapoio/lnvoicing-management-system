@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tooltip, Input, Row, Col, Divider, Tag, Badge } from 'antd';
+import { Table, Button, message, Tooltip, Input, Row, Col, Tag, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { CustomerStore } from '@store/customer';
-import { Customer, customerType, customerStatus } from '@services/gql/customer';
+import { GoodStore } from '@store/good';
+import { Good, goodStatus } from '@services/gql/good';
 import { CreateModal } from './create';
 import { UpdateModal } from './update';
 import * as styles from '@shared/style/index.scss';
 
-const { useStore, dispatch } = CustomerStore;
+const { useStore, dispatch } = GoodStore;
 
 type adtdType = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
 interface IOptionColProps {
-  record: Customer;
+  record: Good;
 }
 
 const OptionCol = (props: IOptionColProps) => {
@@ -24,29 +24,29 @@ const OptionCol = (props: IOptionColProps) => {
     setDeleteLoading(true);
     try {
       await dispatch('deleteSingle', record.id);
-      message.success('成功删除本客户！');
+      message.success('成功删除本商品！');
     } catch (e) {
       setDeleteLoading(false);
-      message.error('删除客户失败！');
+      message.error('删除商品失败！');
     }
   };
   const onUpdate = async () => setUpdateShow(true);
   const activeShow = {
-    [customerStatus.ACTIVE]: {
+    [goodStatus.ACTIVE]: {
       title: '停用本条数据',
       icon: 'stop'
     },
-    [customerStatus.INACTIVE]: {
+    [goodStatus.INACTIVE]: {
       title: '启用本条数据',
       icon: 'check'
     }
   }[record.status];
   const onChangeActive = async () => {
     const newData = { ...record };
-    newData.status = record.status === customerStatus.ACTIVE ? customerStatus.INACTIVE : customerStatus.ACTIVE;
+    newData.status = record.status === goodStatus.ACTIVE ? goodStatus.INACTIVE : goodStatus.ACTIVE;
     setActiveLoading(true);
     try {
-      await dispatch('update', newData);
+      await dispatch('update', Object.assign({}, newData, { model: newData.model.id, brand: newData.brand.id }));
       message.success('成功' + activeShow.title);
     } catch (e) {
       message.error(activeShow.title + '失败！');
@@ -69,66 +69,54 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Customer>> = [
+const columns: Array<ColumnProps<Good>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
   },
   {
-    title: '名称',
-    dataIndex: 'name'
+    title: '品牌',
+    dataIndex: 'brand.name'
   },
   {
-    title: '电话',
-    dataIndex: 'phone'
+    title: '类型',
+    dataIndex: 'model.name'
   },
   {
-    title: '地址',
-    dataIndex: 'address'
+    title: '花纹',
+    dataIndex: 'pattern'
   },
   {
-    title: '负责人姓名',
-    dataIndex: 'manageName'
+    title: '载重指数',
+    dataIndex: 'loadIndex'
   },
   {
-    title: '负责人电话',
-    dataIndex: 'managePhone'
+    title: '规格',
+    dataIndex: 'specification'
   },
   {
-    title: '客户类型',
-    dataIndex: 'type',
-    render: (type: customerType) => {
-      const customerTypeBox = {
-        [customerType.NORMAL]: {
-          text: '普通用户',
-          color: '#87d068'
-        },
-        [customerType.VIP]: {
-          text: 'VIP',
-          color: '#108ee9'
-        },
-        [customerType.SVIP]: {
-          text: 'SVIP',
-          color: '#f50'
-        }
-      }[type];
-      if (!customerTypeBox) {
-        return <Tag color="red">未知类型</Tag>;
-      }
-      return <Tag color={customerTypeBox.color}>{customerTypeBox.text}</Tag>;
-    }
+    title: '单位',
+    dataIndex: 'unit'
+  },
+  {
+    title: '速度级别',
+    dataIndex: 'speedLevel'
+  },
+  {
+    title: '制造厂商',
+    dataIndex: 'brand.manufacturer'
   },
   {
     title: '状态',
     dataIndex: 'status',
-    render: (status: customerStatus) => {
+    render: (status: goodStatus) => {
       const statusColor = {
-        [customerStatus.ACTIVE]: 'success',
-        [customerStatus.INACTIVE]: 'error'
+        [goodStatus.ACTIVE]: 'success',
+        [goodStatus.INACTIVE]: 'error'
       };
       const statusText = {
-        [customerStatus.ACTIVE]: '激活',
-        [customerStatus.INACTIVE]: '暂停'
+        [goodStatus.ACTIVE]: '激活',
+        [goodStatus.INACTIVE]: '暂停'
       };
       const color = statusColor[status] as adtdType;
       return <Badge status={color} text={statusText[status]} />;
@@ -155,7 +143,7 @@ export const Tables = () => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取客户数据成功');
+      message.success('获取商品数据成功');
     } catch (error) {
       message.error(error.message);
     }
@@ -172,7 +160,7 @@ export const Tables = () => {
       <CreateModal show={showCreate} onShow={setShowCreate} />
       <Row gutter={12}>
         <Col span={8}>
-          <Input placeholder="输入名称搜索" value={search} onChange={onChangeSearch} />
+          <Input placeholder="输入规格或花纹搜索" value={search} onChange={onChangeSearch} />
         </Col>
         <Button icon="plus" type="primary" onClick={onShowCreate}>
           新建
@@ -181,9 +169,9 @@ export const Tables = () => {
           刷新
         </Button>
       </Row>
-      <Table<Customer>
+      <Table<Good>
         columns={columns}
-        dataSource={list.filter(item => item.name.includes(search))}
+        dataSource={list.filter(item => item.specification.includes(search) || item.pattern.includes(search))}
         rowKey={r => `${r.id}`}
         loading={loading}
         pagination={{ showSizeChanger: true }}

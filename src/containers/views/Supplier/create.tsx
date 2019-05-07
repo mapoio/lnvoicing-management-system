@@ -1,20 +1,20 @@
 import React from 'react';
 import { Button, Modal, Form } from 'antd';
-import { CustomerStore } from '@store/customer';
+import { SupplierStore } from '@store/supplier';
 import { useCreateOrUpdateState } from '@components/UseStates';
-import { CustomerCoreData } from '@services/gql/customer';
+import { SupplierCoreData } from '@services/gql/supplier';
 import { CreateOrUpdateForm } from './form';
 import { formItemLayout } from '@constants/index';
 
-const { dispatch } = CustomerStore;
+const { dispatch } = SupplierStore;
 
-interface ICreateCustomer {
+interface ICreateSupplier {
   show: boolean;
   onShow: (show: boolean) => void;
 }
 
-export const CreateModal = (props: ICreateCustomer) => {
-  const initData: Partial<CustomerCoreData> = {
+export const CreateModal = (props: ICreateSupplier) => {
+  const initData: Partial<SupplierCoreData> = {
     name: '',
     phone: undefined,
     address: ''
@@ -38,13 +38,13 @@ export const CreateModal = (props: ICreateCustomer) => {
           取消创建
         </Button>
         <Button type="primary" onClick={onOK} loading={loading}>
-          创建客户
+          创建供应商
         </Button>
       </div>
     );
   };
   return (
-    <Modal title="创建客户" visible={props.show} footer={<FooterButton />} onCancel={onCancel}>
+    <Modal title="创建供应商" visible={props.show} footer={<FooterButton />} onCancel={onCancel}>
       <Form {...formItemLayout}>
         <CreateOrUpdateForm data={data} setData={setData} />
       </Form>

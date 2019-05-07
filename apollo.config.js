@@ -1,8 +1,7 @@
 module.exports = {
   client: {
     service: {
-      name: 'my-service-name',
-      // localSchemaFile: './mock/default.graphql',
+      name: 'test',
       url: 'http://localhost:1337/graphql',
       headers: {
         Authorization:

@@ -34,7 +34,7 @@ export const menu: IMenu[] = [
     title: '商品管理',
     path: '/goods/goods',
     icon: 'shopping-cart',
-    component: 'Goods',
+    component: 'Good',
     exact: true
   },
   {
@@ -61,6 +61,14 @@ export const menu: IMenu[] = [
     title: '客户管理',
     icon: 'user',
     component: 'Customer',
+    exact: true
+  },
+  {
+    id: 5,
+    path: '/supplier',
+    title: '供应商管理',
+    icon: 'shop',
+    component: 'Supplier',
     exact: true
   }
 ];

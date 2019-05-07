@@ -18,3 +18,9 @@ export const handleGraphQLError = <D extends GraphQLData<any, any>>(res: D): D =
   }
   return res;
 };
+
+export const searchItem = <T extends any[]>(id: number, source: T) => {
+  const index = source.findIndex(item => item.id === id);
+  const data = source[index];
+  return { index, data };
+};

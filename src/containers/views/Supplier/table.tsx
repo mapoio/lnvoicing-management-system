@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tooltip, Input, Row, Col, Divider, Tag, Badge } from 'antd';
+import { Table, Button, message, Tooltip, Input, Row, Col, Tag, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { CustomerStore } from '@store/customer';
-import { Customer, customerType, customerStatus } from '@services/gql/customer';
+import { SupplierStore } from '@store/supplier';
+import { Supplier, supplierType, supplierStatus } from '@services/gql/supplier';
 import { CreateModal } from './create';
 import { UpdateModal } from './update';
 import * as styles from '@shared/style/index.scss';
 
-const { useStore, dispatch } = CustomerStore;
+const { useStore, dispatch } = SupplierStore;
 
 type adtdType = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
 interface IOptionColProps {
-  record: Customer;
+  record: Supplier;
 }
 
 const OptionCol = (props: IOptionColProps) => {
@@ -24,26 +24,26 @@ const OptionCol = (props: IOptionColProps) => {
     setDeleteLoading(true);
     try {
       await dispatch('deleteSingle', record.id);
-      message.success('成功删除本客户！');
+      message.success('成功删除本供应商！');
     } catch (e) {
       setDeleteLoading(false);
-      message.error('删除客户失败！');
+      message.error('删除供应商失败！');
     }
   };
   const onUpdate = async () => setUpdateShow(true);
   const activeShow = {
-    [customerStatus.ACTIVE]: {
+    [supplierStatus.ACTIVE]: {
       title: '停用本条数据',
       icon: 'stop'
     },
-    [customerStatus.INACTIVE]: {
+    [supplierStatus.INACTIVE]: {
       title: '启用本条数据',
       icon: 'check'
     }
   }[record.status];
   const onChangeActive = async () => {
     const newData = { ...record };
-    newData.status = record.status === customerStatus.ACTIVE ? customerStatus.INACTIVE : customerStatus.ACTIVE;
+    newData.status = record.status === supplierStatus.ACTIVE ? supplierStatus.INACTIVE : supplierStatus.ACTIVE;
     setActiveLoading(true);
     try {
       await dispatch('update', newData);
@@ -69,7 +69,7 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Customer>> = [
+const columns: Array<ColumnProps<Supplier>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
@@ -95,40 +95,40 @@ const columns: Array<ColumnProps<Customer>> = [
     dataIndex: 'managePhone'
   },
   {
-    title: '客户类型',
+    title: '供应商类型',
     dataIndex: 'type',
-    render: (type: customerType) => {
-      const customerTypeBox = {
-        [customerType.NORMAL]: {
-          text: '普通用户',
-          color: '#87d068'
+    render: (type: supplierType) => {
+      const supplierTypeBox = {
+        [supplierType.HIGH]: {
+          text: '高级',
+          color: '#f50'
         },
-        [customerType.VIP]: {
-          text: 'VIP',
+        [supplierType.MIDDLE]: {
+          text: '中等',
           color: '#108ee9'
         },
-        [customerType.SVIP]: {
-          text: 'SVIP',
-          color: '#f50'
+        [supplierType.LOW]: {
+          text: '初等',
+          color: '#87d068'
         }
       }[type];
-      if (!customerTypeBox) {
+      if (!supplierTypeBox) {
         return <Tag color="red">未知类型</Tag>;
       }
-      return <Tag color={customerTypeBox.color}>{customerTypeBox.text}</Tag>;
+      return <Tag color={supplierTypeBox.color}>{supplierTypeBox.text}</Tag>;
     }
   },
   {
     title: '状态',
     dataIndex: 'status',
-    render: (status: customerStatus) => {
+    render: (status: supplierStatus) => {
       const statusColor = {
-        [customerStatus.ACTIVE]: 'success',
-        [customerStatus.INACTIVE]: 'error'
+        [supplierStatus.ACTIVE]: 'success',
+        [supplierStatus.INACTIVE]: 'error'
       };
       const statusText = {
-        [customerStatus.ACTIVE]: '激活',
-        [customerStatus.INACTIVE]: '暂停'
+        [supplierStatus.ACTIVE]: '激活',
+        [supplierStatus.INACTIVE]: '暂停'
       };
       const color = statusColor[status] as adtdType;
       return <Badge status={color} text={statusText[status]} />;
@@ -155,7 +155,7 @@ export const Tables = () => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取客户数据成功');
+      message.success('获取供应商数据成功');
     } catch (error) {
       message.error(error.message);
     }
@@ -181,7 +181,7 @@ export const Tables = () => {
           刷新
         </Button>
       </Row>
-      <Table<Customer>
+      <Table<Supplier>
         columns={columns}
         dataSource={list.filter(item => item.name.includes(search))}
         rowKey={r => `${r.id}`}
