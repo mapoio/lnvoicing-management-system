@@ -1,21 +1,21 @@
 import React from 'react';
 import { Input, Form, Select } from 'antd';
-import { supplierStatus, supplierType, Supplier } from '@services/gql/supplier';
+import { repertoryStatus, Repertory } from '@services/gql/repertory';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 interface IStatusProps {
-  status: supplierStatus;
-  setStatus: (status: supplierStatus) => void;
+  status: repertoryStatus;
+  setStatus: (status: repertoryStatus) => void;
   disabled?: boolean;
 }
 
 const StatusSelect = (props: IStatusProps) => {
   const { status, setStatus, disabled } = props;
   const statusOption = {
-    [supplierStatus.INACTIVE]: '停用',
-    [supplierStatus.ACTIVE]: '激活'
+    [repertoryStatus.INACTIVE]: '停用',
+    [repertoryStatus.ACTIVE]: '激活'
   };
   return (
     <Select value={statusOption[status] || 'ACTIVE'} onChange={setStatus} disabled={disabled}>
@@ -28,55 +28,25 @@ const StatusSelect = (props: IStatusProps) => {
   );
 };
 
-interface ITypeProps {
-  type: supplierType;
-  setType: (type: supplierType) => void;
-}
-
-const TypeSelect = (props: ITypeProps) => {
-  const { type, setType } = props;
-  const typeOption = {
-    [supplierType.HIGH]: '高级',
-    [supplierType.MIDDLE]: '中等',
-    [supplierType.LOW]: '初级'
-  };
-  return (
-    <Select value={type || supplierType.LOW} onChange={setType}>
-      {Object.keys(typeOption).map(key => (
-        <Option key={key} value={key}>
-          {typeOption[key]}
-        </Option>
-      ))}
-    </Select>
-  );
-};
-
 interface IFormProps {
-  data: Partial<Supplier>;
-  setData: (value: React.SetStateAction<Partial<Supplier>>) => void;
+  data: Partial<Repertory>;
+  setData: (value: React.SetStateAction<Partial<Repertory>>) => void;
 }
 
 export const CreateOrUpdateForm = (props: IFormProps) => {
   const { data, setData } = props;
   return (
     <>
-      <FormItem label="供应商名称" required>
+      <FormItem label="仓库名称" required>
         <Input
-          placeholder="输入供应商名称"
+          placeholder="输入仓库名称"
           value={data.name}
           onChange={e => setData(Object.assign({}, data, { name: e.target.value }))}
         />
       </FormItem>
-      <FormItem label="供应商电话" required>
+      <FormItem label="仓库地址" required>
         <Input
-          placeholder="输入供应商电话"
-          value={data.phone}
-          onChange={e => setData(Object.assign({}, data, { phone: e.target.value }))}
-        />
-      </FormItem>
-      <FormItem label="供应商地址" required>
-        <Input
-          placeholder="输入供应商地址"
+          placeholder="输入仓库地址"
           value={data.address}
           onChange={e => setData(Object.assign({}, data, { address: e.target.value }))}
         />
@@ -95,10 +65,7 @@ export const CreateOrUpdateForm = (props: IFormProps) => {
           onChange={e => setData(Object.assign({}, data, { managePhone: e.target.value }))}
         />
       </FormItem>
-      <FormItem label="供应商类型" required>
-        <TypeSelect type={data.type} setType={type => setData(Object.assign({}, data, { type }))} />
-      </FormItem>
-      <FormItem label="供应商状态" required>
+      <FormItem label="仓库状态" required>
         <StatusSelect
           disabled={!!data.id}
           status={data.status}

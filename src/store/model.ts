@@ -21,7 +21,7 @@ const { useStore, dispatch } = createStore({
     updateList(state, payload: Model[]) {
       state.list = state.list = payload || [];
     },
-    delete(state, payload: number) {
+    delete(state, payload: string) {
       const index = state.list.findIndex(item => item.id === payload);
       if (index > -1) {
         state.list.splice(index, 1);
@@ -42,7 +42,7 @@ const { useStore, dispatch } = createStore({
       const data = handleGraphQLError(await LIST.send({ limit: limit || 5 }));
       dispatch('updateList', data.data.models);
     },
-    async deleteSingle(id: number) {
+    async deleteSingle(id: string) {
       handleGraphQLError(await DELETE.send({ id }));
       dispatch('delete', id);
     },

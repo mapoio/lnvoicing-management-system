@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tooltip, Input, Row, Col, Tag, Badge } from 'antd';
+import { Table, Button, message, Tooltip, Input, Row, Col, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { GoodStore } from '@store/good';
-import { Good, goodStatus } from '@services/gql/good';
+import { RepertoryStore } from '@store/repertory';
+import { Repertory, repertoryStatus } from '@services/gql/repertory';
 import { CreateModal } from './create';
 import { UpdateModal } from './update';
 import * as styles from '@shared/style/index.scss';
 
-const { useStore, dispatch } = GoodStore;
+const { useStore, dispatch } = RepertoryStore;
 
 type adtdType = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
 interface IOptionColProps {
-  record: Good;
+  record: Repertory;
 }
 
 const OptionCol = (props: IOptionColProps) => {
@@ -24,30 +24,30 @@ const OptionCol = (props: IOptionColProps) => {
     setDeleteLoading(true);
     try {
       await dispatch('deleteSingle', record.id);
-      message.success('成功删除本商品！');
+      message.success('成功删除本仓库！');
     } catch (e) {
       setDeleteLoading(false);
-      message.error('删除商品失败！');
+      message.error('删除仓库失败！');
     }
   };
   const onUpdate = async () => setUpdateShow(true);
   const activeShow =
     {
-      [goodStatus.ACTIVE]: {
+      [repertoryStatus.ACTIVE]: {
         title: '停用本条数据',
         icon: 'stop'
       },
-      [goodStatus.INACTIVE]: {
+      [repertoryStatus.INACTIVE]: {
         title: '启用本条数据',
         icon: 'check'
       }
     }[record.status] || {};
   const onChangeActive = async () => {
     const newData = { ...record };
-    newData.status = record.status === goodStatus.ACTIVE ? goodStatus.INACTIVE : goodStatus.ACTIVE;
+    newData.status = record.status === repertoryStatus.ACTIVE ? repertoryStatus.INACTIVE : repertoryStatus.ACTIVE;
     setActiveLoading(true);
     try {
-      await dispatch('update', Object.assign({}, newData, { model: newData.model.id, brand: newData.brand.id }));
+      await dispatch('update', newData);
       message.success('成功' + activeShow.title);
     } catch (e) {
       message.error(activeShow.title + '失败！');
@@ -70,54 +70,38 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Good>> = [
+const columns: Array<ColumnProps<Repertory>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
   },
   {
-    title: '品牌',
-    dataIndex: 'brand.name'
+    title: '名称',
+    dataIndex: 'name'
   },
   {
-    title: '类型',
-    dataIndex: 'model.name'
+    title: '地址',
+    dataIndex: 'address'
   },
   {
-    title: '花纹',
-    dataIndex: 'pattern'
+    title: '负责人姓名',
+    dataIndex: 'manageName'
   },
   {
-    title: '载重指数',
-    dataIndex: 'loadIndex'
-  },
-  {
-    title: '规格',
-    dataIndex: 'specification'
-  },
-  {
-    title: '单位',
-    dataIndex: 'unit'
-  },
-  {
-    title: '速度级别',
-    dataIndex: 'speedLevel'
-  },
-  {
-    title: '制造厂商',
-    dataIndex: 'brand.manufacturer'
+    title: '负责人电话',
+    dataIndex: 'managePhone'
   },
   {
     title: '状态',
     dataIndex: 'status',
-    render: (status: goodStatus) => {
+    render: (status: repertoryStatus) => {
       const statusColor = {
-        [goodStatus.ACTIVE]: 'success',
-        [goodStatus.INACTIVE]: 'error'
+        [repertoryStatus.ACTIVE]: 'success',
+        [repertoryStatus.INACTIVE]: 'error'
       };
       const statusText = {
-        [goodStatus.ACTIVE]: '激活',
-        [goodStatus.INACTIVE]: '暂停'
+        [repertoryStatus.ACTIVE]: '激活',
+        [repertoryStatus.INACTIVE]: '暂停'
       };
       const color = statusColor[status] as adtdType;
       return <Badge status={color} text={statusText[status]} />;
@@ -144,7 +128,7 @@ export const Tables = () => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取商品数据成功');
+      message.success('获取仓库数据成功');
     } catch (error) {
       message.error(error.message);
     }
@@ -161,7 +145,7 @@ export const Tables = () => {
       <CreateModal show={showCreate} onShow={setShowCreate} />
       <Row gutter={12}>
         <Col span={8}>
-          <Input placeholder="输入规格或花纹搜索" value={search} onChange={onChangeSearch} />
+          <Input placeholder="输入名称搜索" value={search} onChange={onChangeSearch} />
         </Col>
         <Button icon="plus" type="primary" onClick={onShowCreate}>
           新建
@@ -170,9 +154,9 @@ export const Tables = () => {
           刷新
         </Button>
       </Row>
-      <Table<Good>
+      <Table<Repertory>
         columns={columns}
-        dataSource={list.filter(item => item.specification.includes(search) || item.pattern.includes(search))}
+        dataSource={list.filter(item => item.name.includes(search))}
         rowKey={r => `${r.id}`}
         loading={loading}
         pagination={{ showSizeChanger: true }}

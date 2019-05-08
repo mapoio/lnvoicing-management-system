@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tooltip, Input, Row, Col, Tag, Badge } from 'antd';
+import { Table, Button, message, Tooltip, Input, Row, Col, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { GoodStore } from '@store/good';
-import { Good, goodStatus } from '@services/gql/good';
+import { PurchaseStore } from '@store/purchase';
+import { Purchase, purchaseStatus } from '@services/gql/purchase';
 import { CreateModal } from './create';
 import { UpdateModal } from './update';
+import dayjs from 'dayjs';
 import * as styles from '@shared/style/index.scss';
 
-const { useStore, dispatch } = GoodStore;
+const { useStore, dispatch } = PurchaseStore;
 
 type adtdType = 'success' | 'processing' | 'default' | 'error' | 'warning';
 
 interface IOptionColProps {
-  record: Good;
+  record: Purchase;
 }
 
 const OptionCol = (props: IOptionColProps) => {
@@ -24,30 +25,30 @@ const OptionCol = (props: IOptionColProps) => {
     setDeleteLoading(true);
     try {
       await dispatch('deleteSingle', record.id);
-      message.success('成功删除本商品！');
+      message.success('成功删除本采购单！');
     } catch (e) {
       setDeleteLoading(false);
-      message.error('删除商品失败！');
+      message.error('删除采购单失败！');
     }
   };
   const onUpdate = async () => setUpdateShow(true);
   const activeShow =
     {
-      [goodStatus.ACTIVE]: {
+      [purchaseStatus.BUILDED]: {
         title: '停用本条数据',
         icon: 'stop'
       },
-      [goodStatus.INACTIVE]: {
+      [purchaseStatus.INVAILD]: {
         title: '启用本条数据',
         icon: 'check'
       }
     }[record.status] || {};
   const onChangeActive = async () => {
     const newData = { ...record };
-    newData.status = record.status === goodStatus.ACTIVE ? goodStatus.INACTIVE : goodStatus.ACTIVE;
+    newData.status = record.status === purchaseStatus.BUILDED ? purchaseStatus.INVAILD : purchaseStatus.BUILDED;
     setActiveLoading(true);
     try {
-      await dispatch('update', Object.assign({}, newData, { model: newData.model.id, brand: newData.brand.id }));
+      await dispatch('update', newData);
       message.success('成功' + activeShow.title);
     } catch (e) {
       message.error(activeShow.title + '失败！');
@@ -70,57 +71,58 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Good>> = [
+const columns: Array<ColumnProps<Purchase>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
   },
   {
-    title: '品牌',
-    dataIndex: 'brand.name'
+    title: '单号',
+    dataIndex: 'batch'
   },
   {
-    title: '类型',
-    dataIndex: 'model.name'
+    title: '金额',
+    dataIndex: 'money'
   },
   {
-    title: '花纹',
-    dataIndex: 'pattern'
+    title: '供应商名称',
+    dataIndex: 'supplier.name'
   },
   {
-    title: '载重指数',
-    dataIndex: 'loadIndex'
+    title: '供应商电话',
+    dataIndex: 'supplier.phone'
   },
   {
-    title: '规格',
-    dataIndex: 'specification'
+    title: '备注',
+    dataIndex: 'remark'
   },
   {
-    title: '单位',
-    dataIndex: 'unit'
+    title: '更新时间',
+    dataIndex: 'created_at',
+    render: (num: number) => dayjs(num).format('YYYY-MM-DD HH:mm:ss')
   },
   {
-    title: '速度级别',
-    dataIndex: 'speedLevel'
-  },
-  {
-    title: '制造厂商',
-    dataIndex: 'brand.manufacturer'
+    title: '创建时间',
+    dataIndex: 'updated_at',
+    render: (num: number) => dayjs(num).format('YYYY-MM-DD HH:mm:ss')
   },
   {
     title: '状态',
     dataIndex: 'status',
-    render: (status: goodStatus) => {
-      const statusColor = {
-        [goodStatus.ACTIVE]: 'success',
-        [goodStatus.INACTIVE]: 'error'
-      };
-      const statusText = {
-        [goodStatus.ACTIVE]: '激活',
-        [goodStatus.INACTIVE]: '暂停'
-      };
-      const color = statusColor[status] as adtdType;
-      return <Badge status={color} text={statusText[status]} />;
+    render: (status: purchaseStatus) => {
+      const statusText =
+        {
+          [purchaseStatus.BUILDED]: {
+            icon: 'success',
+            text: '已建立'
+          },
+          [purchaseStatus.INVAILD]: {
+            icon: 'error',
+            text: '无效'
+          }
+        }[status] || {};
+      const color = statusText.icon as adtdType;
+      return <Badge status={color} text={statusText.text} />;
     }
   },
   {
@@ -144,7 +146,7 @@ export const Tables = () => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取商品数据成功');
+      message.success('获取采购单数据成功');
     } catch (error) {
       message.error(error.message);
     }
@@ -161,7 +163,7 @@ export const Tables = () => {
       <CreateModal show={showCreate} onShow={setShowCreate} />
       <Row gutter={12}>
         <Col span={8}>
-          <Input placeholder="输入规格或花纹搜索" value={search} onChange={onChangeSearch} />
+          <Input placeholder="输入名称搜索" value={search} onChange={onChangeSearch} />
         </Col>
         <Button icon="plus" type="primary" onClick={onShowCreate}>
           新建
@@ -170,9 +172,9 @@ export const Tables = () => {
           刷新
         </Button>
       </Row>
-      <Table<Good>
+      <Table<Purchase>
         columns={columns}
-        dataSource={list.filter(item => item.specification.includes(search) || item.pattern.includes(search))}
+        dataSource={list.filter(item => item.batch.includes(search))}
         rowKey={r => `${r.id}`}
         loading={loading}
         pagination={{ showSizeChanger: true }}

@@ -31,16 +31,17 @@ const OptionCol = (props: IOptionColProps) => {
     }
   };
   const onUpdate = async () => setUpdateShow(true);
-  const activeShow = {
-    [supplierStatus.ACTIVE]: {
-      title: '停用本条数据',
-      icon: 'stop'
-    },
-    [supplierStatus.INACTIVE]: {
-      title: '启用本条数据',
-      icon: 'check'
-    }
-  }[record.status];
+  const activeShow =
+    {
+      [supplierStatus.ACTIVE]: {
+        title: '停用本条数据',
+        icon: 'stop'
+      },
+      [supplierStatus.INACTIVE]: {
+        title: '启用本条数据',
+        icon: 'check'
+      }
+    }[record.status] || {};
   const onChangeActive = async () => {
     const newData = { ...record };
     newData.status = record.status === supplierStatus.ACTIVE ? supplierStatus.INACTIVE : supplierStatus.ACTIVE;
@@ -98,20 +99,21 @@ const columns: Array<ColumnProps<Supplier>> = [
     title: '供应商类型',
     dataIndex: 'type',
     render: (type: supplierType) => {
-      const supplierTypeBox = {
-        [supplierType.HIGH]: {
-          text: '高级',
-          color: '#f50'
-        },
-        [supplierType.MIDDLE]: {
-          text: '中等',
-          color: '#108ee9'
-        },
-        [supplierType.LOW]: {
-          text: '初等',
-          color: '#87d068'
-        }
-      }[type];
+      const supplierTypeBox =
+        {
+          [supplierType.HIGH]: {
+            text: '高级',
+            color: '#f50'
+          },
+          [supplierType.MIDDLE]: {
+            text: '中等',
+            color: '#108ee9'
+          },
+          [supplierType.LOW]: {
+            text: '初等',
+            color: '#87d068'
+          }
+        }[type] || {};
       if (!supplierTypeBox) {
         return <Tag color="red">未知类型</Tag>;
       }

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 import { GraphQLHttp } from '@utils/http';
 import { GraphQLData, BaseModel } from '@utils/index';
-import { Brand } from './brand';
-import { Model } from './model';
+import { Brand, brandGraphQLString } from './brand';
+import { Model, modelGraphQLString } from './model';
 
 export enum goodStatus {
   ACTIVE = 'ACTIVE',
@@ -36,6 +36,28 @@ export interface GetGoodsParams {
   limit: number;
 }
 
+export const goodCoreGraphQLString = `
+id
+speedLevel
+specification
+loadIndex
+pattern
+unit
+status
+created_at
+updated_at
+`;
+
+export const goodGraphQLString = `
+${goodCoreGraphQLString}
+brand {
+  ${brandGraphQLString}
+}
+model {
+  ${modelGraphQLString}
+}
+`;
+
 export class GetGoods extends GraphQLHttp<GetGoodsData, GetGoodsParams> {
   public variables: GetGoodsParams = {
     limit: 10
@@ -43,28 +65,7 @@ export class GetGoods extends GraphQLHttp<GetGoodsData, GetGoodsParams> {
   public query = gql`
     query get($limit: Int) {
       goods(limit: $limit) {
-        id
-        speedLevel
-        specification
-        loadIndex
-        pattern
-        unit
-        brand {
-          id
-          name
-          manufacturer
-          created_at
-          updated_at
-        }
-        model {
-          id
-          name
-          created_at
-          updated_at
-        }
-        status
-        created_at
-        updated_at
+        ${goodGraphQLString}
       }
     }
   `;
@@ -77,7 +78,7 @@ type TDeleteGoodData = {
 export type DeleteGoodData = GraphQLData<TDeleteGoodData>;
 
 export interface DeleteGoodParams {
-  id: number;
+  id: string;
 }
 
 export class DeleteGood extends GraphQLHttp<DeleteGoodData, DeleteGoodParams> {
@@ -101,7 +102,7 @@ export type UpdateGoodData = GraphQLData<TUpdateGoodData>;
 export type UpdateGoodParamsData = GoodCoreData;
 
 interface IUpdateGoodParams {
-  id: number;
+  id: string;
   data: UpdateGoodParamsData;
 }
 
@@ -110,28 +111,7 @@ export class UpdateGood extends GraphQLHttp<UpdateGoodData, IUpdateGoodParams> {
     mutation update($id: ID!, $data: editGoodsInput!) {
       updateGoods(input: { where: { id: $id }, data: $data }) {
         good {
-          id
-          speedLevel
-          specification
-          loadIndex
-          pattern
-          unit
-          brand {
-            id
-            name
-            manufacturer
-            created_at
-            updated_at
-          }
-          model {
-            id
-            name
-            created_at
-            updated_at
-          }
-          status
-          created_at
-          updated_at
+          ${goodGraphQLString}
         }
       }
     }
@@ -155,28 +135,7 @@ export class CreateGood extends GraphQLHttp<createGoodData, ICreateGoodParams> {
     mutation create($data: GoodsInput!) {
       createGoods(input: { data: $data }) {
         good {
-          id
-          speedLevel
-          specification
-          loadIndex
-          pattern
-          unit
-          brand {
-            id
-            name
-            manufacturer
-            created_at
-            updated_at
-          }
-          model {
-            id
-            name
-            created_at
-            updated_at
-          }
-          status
-          created_at
-          updated_at
+          ${goodGraphQLString}
         }
       }
     }

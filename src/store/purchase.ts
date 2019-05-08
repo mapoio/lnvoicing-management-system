@@ -1,26 +1,26 @@
 import { createStore } from 'react-state-manage';
 import {
-  GetSuppliers,
-  Supplier,
-  DeleteSupplier,
-  CreateSupplierParamsData,
-  CreateSupplier,
-  UpdateSupplier
-} from '@services/gql/supplier';
+  GetPurchases,
+  Purchase,
+  DeletePurchase,
+  CreatePurchaseParamsData,
+  CreatePurchase,
+  UpdatePurchase
+} from '@services/gql/purchase';
 import { handleGraphQLError } from '@utils/index';
 
 interface IState {
-  list: Supplier[];
+  list: Purchase[];
 }
 
 const initState: IState = {
   list: []
 };
 
-const LIST = new GetSuppliers();
-const DELETE = new DeleteSupplier();
-const CREATE = new CreateSupplier();
-const UPDATE = new UpdateSupplier();
+const LIST = new GetPurchases();
+const DELETE = new DeletePurchase();
+const CREATE = new CreatePurchase();
+const UPDATE = new UpdatePurchase();
 
 const searchItem = <T extends any[]>(id: string, source: T) => {
   const index = source.findIndex(item => item.id === id);
@@ -31,7 +31,7 @@ const searchItem = <T extends any[]>(id: string, source: T) => {
 const { useStore, dispatch } = createStore({
   state: initState,
   reducers: {
-    updateList(state, payload: Supplier[]) {
+    updateList(state, payload: Purchase[]) {
       state.list = state.list = payload || [];
     },
     delete(state, payload: string) {
@@ -40,35 +40,35 @@ const { useStore, dispatch } = createStore({
         state.list.splice(index, 1);
       }
     },
-    updateOne(state, payload: Supplier) {
+    updateOne(state, payload: Purchase) {
       const index = searchItem(payload.id, state.list).index;
       if (index > -1) {
         state.list[index] = payload;
       }
     },
-    createOne(state, payload: Supplier) {
+    createOne(state, payload: Purchase) {
       state.list.push(payload);
     }
   },
   effects: {
     async getList(limit: number) {
       const data = handleGraphQLError(await LIST.send({ limit: limit || 5 }));
-      dispatch('updateList', data.data.suppliers);
+      dispatch('updateList', data.data.purchases);
     },
     async deleteSingle(id: string) {
       handleGraphQLError(await DELETE.send({ id }));
       dispatch('delete', id);
     },
-    async create(data: CreateSupplierParamsData) {
+    async create(data: CreatePurchaseParamsData) {
       const res = handleGraphQLError(await CREATE.send({ data }));
-      dispatch('createOne', res.data.createSupplier.supplier);
+      dispatch('createOne', res.data.createPurchase.purchase);
     },
-    async update(item: Supplier) {
+    async update(item: Purchase) {
       const { id, created_at, updated_at, ...data } = item;
       const res = handleGraphQLError(await UPDATE.send({ data, id }));
-      dispatch('updateOne', res.data.updateSupplier.supplier);
+      dispatch('updateOne', res.data.updatePurchase.purchase);
     }
   }
 });
 
-export const SupplierStore = { useStore, dispatch };
+export const PurchaseStore = { useStore, dispatch };

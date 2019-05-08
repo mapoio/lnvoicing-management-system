@@ -22,7 +22,7 @@ const DELETE = new DeleteCustomer();
 const CREATE = new CreateCustomer();
 const UPDATE = new UpdateCustomer();
 
-const searchItem = <T extends any[]>(id: number, source: T) => {
+const searchItem = <T extends any[]>(id: string, source: T) => {
   const index = source.findIndex(item => item.id === id);
   const data = source[index];
   return { index, data };
@@ -34,7 +34,7 @@ const { useStore, dispatch } = createStore({
     updateList(state, payload: Customer[]) {
       state.list = state.list = payload || [];
     },
-    delete(state, payload: number) {
+    delete(state, payload: string) {
       const index = searchItem(payload, state.list).index;
       if (index > -1) {
         state.list.splice(index, 1);
@@ -55,7 +55,7 @@ const { useStore, dispatch } = createStore({
       const data = handleGraphQLError(await LIST.send({ limit: limit || 5 }));
       dispatch('updateList', data.data.customers);
     },
-    async deleteSingle(id: number) {
+    async deleteSingle(id: string) {
       handleGraphQLError(await DELETE.send({ id }));
       dispatch('delete', id);
     },

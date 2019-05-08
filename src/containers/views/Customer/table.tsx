@@ -31,16 +31,17 @@ const OptionCol = (props: IOptionColProps) => {
     }
   };
   const onUpdate = async () => setUpdateShow(true);
-  const activeShow = {
-    [customerStatus.ACTIVE]: {
-      title: '停用本条数据',
-      icon: 'stop'
-    },
-    [customerStatus.INACTIVE]: {
-      title: '启用本条数据',
-      icon: 'check'
-    }
-  }[record.status];
+  const activeShow =
+    {
+      [customerStatus.ACTIVE]: {
+        title: '停用本条数据',
+        icon: 'stop'
+      },
+      [customerStatus.INACTIVE]: {
+        title: '启用本条数据',
+        icon: 'check'
+      }
+    }[record.status] || {};
   const onChangeActive = async () => {
     const newData = { ...record };
     newData.status = record.status === customerStatus.ACTIVE ? customerStatus.INACTIVE : customerStatus.ACTIVE;

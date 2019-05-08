@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Form, Select } from 'antd';
-import { GoodCoreData, goodStatus } from '@services/gql/good';
+import { goodStatus, Good } from '@services/gql/good';
 import { Brand } from '@services/gql/brand';
 import { BrandStore } from '@store/brand';
 import { ModelStore } from '@store/model';
@@ -13,16 +13,17 @@ const Option = Select.Option;
 interface IStatusProps {
   status: goodStatus;
   setStatus: (status: goodStatus) => void;
+  disabled?: boolean;
 }
 
 const StatusSelect = (props: IStatusProps) => {
-  const { status, setStatus } = props;
+  const { status, setStatus, disabled } = props;
   const statusOption = {
     [goodStatus.INACTIVE]: '停用',
     [goodStatus.ACTIVE]: '激活'
   };
   return (
-    <Select value={statusOption[status] || 'ACTIVE'} onChange={setStatus} disabled={!!statusOption[status]}>
+    <Select value={status || goodStatus.ACTIVE} onChange={setStatus} disabled={disabled}>
       {Object.keys(statusOption).map(key => (
         <Option key={key} value={key}>
           {statusOption[key]}
@@ -81,8 +82,8 @@ const ModelSelect = (props: IModelSelect) => {
 };
 
 interface IFormProps {
-  data: Partial<GoodCoreData>;
-  setData: (value: React.SetStateAction<Partial<GoodCoreData>>) => void;
+  data: Partial<Good>;
+  setData: (value: React.SetStateAction<Partial<Good>>) => void;
 }
 
 export const CreateOrUpdateForm = (props: IFormProps) => {
@@ -131,7 +132,11 @@ export const CreateOrUpdateForm = (props: IFormProps) => {
         <BrandSelect brand={data.brand} setBrand={brand => setData(Object.assign({}, data, { brand }))} />
       </FormItem>
       <FormItem label="商品状态" required>
-        <StatusSelect status={data.status} setStatus={status => setData(Object.assign({}, data, { status }))} />
+        <StatusSelect
+          disabled={!!data.id}
+          status={data.status}
+          setStatus={status => setData(Object.assign({}, data, { status }))}
+        />
       </FormItem>
     </>
   );

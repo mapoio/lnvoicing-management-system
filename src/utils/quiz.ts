@@ -4,7 +4,7 @@ export interface GraphQLData<D, E = any> {
 }
 
 export interface BaseModel {
-  readonly id: number;
+  readonly id: string;
   readonly created_at: number;
   readonly updated_at: number;
 }
@@ -19,7 +19,7 @@ export const handleGraphQLError = <D extends GraphQLData<any, any>>(res: D): D =
   return res;
 };
 
-export const searchItem = <T extends any[]>(id: number, source: T) => {
+export const searchItem = <T extends any[]>(id: string, source: T) => {
   const index = source.findIndex(item => item.id === id);
   const data = source[index];
   return { index, data };

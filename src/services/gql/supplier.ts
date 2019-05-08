@@ -39,6 +39,19 @@ export interface GetSuppliersParams {
   limit: number;
 }
 
+export const supplierGraphQLString = `
+id
+name
+phone
+address
+manageName
+managePhone
+type
+status
+created_at
+updated_at
+`;
+
 export class GetSuppliers extends GraphQLHttp<GetSuppliersData, GetSuppliersParams> {
   public variables: GetSuppliersParams = {
     limit: 10
@@ -46,16 +59,7 @@ export class GetSuppliers extends GraphQLHttp<GetSuppliersData, GetSuppliersPara
   public query = gql`
     query get($limit: Int) {
       suppliers(limit: $limit) {
-        id
-        name
-        phone
-        address
-        manageName
-        managePhone
-        type
-        status
-        created_at
-        updated_at
+        ${supplierGraphQLString}
       }
     }
   `;
@@ -68,7 +72,7 @@ type TDeleteSupplierData = {
 export type DeleteSupplierData = GraphQLData<TDeleteSupplierData>;
 
 export interface DeleteSupplierParams {
-  id: number;
+  id: string;
 }
 
 export class DeleteSupplier extends GraphQLHttp<DeleteSupplierData, DeleteSupplierParams> {
@@ -92,7 +96,7 @@ export type UpdateSupplierData = GraphQLData<TUpdateSupplierData>;
 export type UpdateSupplierParamsData = SupplierCoreData;
 
 interface IUpdateSupplierParams {
-  id: number;
+  id: string;
   data: UpdateSupplierParamsData;
 }
 
@@ -101,16 +105,7 @@ export class UpdateSupplier extends GraphQLHttp<UpdateSupplierData, IUpdateSuppl
     mutation update($id: ID!, $data: editSupplierInput!) {
       updateSupplier(input: { where: { id: $id }, data: $data }) {
         supplier {
-          id
-          name
-          phone
-          address
-          manageName
-          managePhone
-          type
-          status
-          created_at
-          updated_at
+          ${supplierGraphQLString}
         }
       }
     }
@@ -134,16 +129,7 @@ export class CreateSupplier extends GraphQLHttp<createSupplierData, ICreateSuppl
     mutation create($data: SupplierInput!) {
       createSupplier(input: { data: $data }) {
         supplier {
-          id
-          name
-          phone
-          address
-          manageName
-          managePhone
-          type
-          status
-          created_at
-          updated_at
+          ${supplierGraphQLString}
         }
       }
     }

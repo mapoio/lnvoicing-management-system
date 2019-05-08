@@ -24,6 +24,15 @@ export interface GetBrandsParams {
   limit: number;
 }
 
+export const brandGraphQLString = `
+id
+name
+manufacturer
+remark
+created_at
+updated_at
+`;
+
 export class GetBrands extends GraphQLHttp<GetBrandsData, GetBrandsParams> {
   public variables: GetBrandsParams = {
     limit: 10
@@ -31,12 +40,7 @@ export class GetBrands extends GraphQLHttp<GetBrandsData, GetBrandsParams> {
   public query = gql`
     query get($limit: Int) {
       brands(limit: $limit) {
-        id
-        name
-        manufacturer
-        remark
-        created_at
-        updated_at
+        ${brandGraphQLString}
       }
     }
   `;
@@ -49,7 +53,7 @@ type TDeleteBrandData = {
 export type DeleteBrandData = GraphQLData<TDeleteBrandData>;
 
 export interface DeleteBrandParams {
-  id: number;
+  id: string;
 }
 
 export class DeleteBrand extends GraphQLHttp<DeleteBrandData, DeleteBrandParams> {
@@ -73,7 +77,7 @@ export type UpdateBrandData = GraphQLData<TUpdateBrandData>;
 export type UpdateBrandParamsData = BrandCoreData;
 
 interface IUpdateBrandParams {
-  id: number;
+  id: string;
   data: UpdateBrandParamsData;
 }
 
@@ -82,12 +86,7 @@ export class UpdateBrand extends GraphQLHttp<UpdateBrandData, IUpdateBrandParams
     mutation update($id: ID!, $data: editBrandInput!) {
       updateBrand(input: { where: { id: $id }, data: $data }) {
         brand {
-          id
-          name
-          manufacturer
-          remark
-          created_at
-          updated_at
+          ${brandGraphQLString}
         }
       }
     }
@@ -111,12 +110,7 @@ export class CreateBrand extends GraphQLHttp<createBrandData, ICreateBrandParams
     mutation create($data: BrandInput!) {
       createBrand(input: { data: $data }) {
         brand {
-          id
-          name
-          manufacturer
-          remark
-          created_at
-          updated_at
+          ${brandGraphQLString}
         }
       }
     }

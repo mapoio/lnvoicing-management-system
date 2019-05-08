@@ -68,7 +68,7 @@ type TDeleteCustomerData = {
 export type DeleteCustomerData = GraphQLData<TDeleteCustomerData>;
 
 export interface DeleteCustomerParams {
-  id: number;
+  id: string;
 }
 
 export class DeleteCustomer extends GraphQLHttp<DeleteCustomerData, DeleteCustomerParams> {
@@ -92,7 +92,7 @@ export type UpdateCustomerData = GraphQLData<TUpdateCustomerData>;
 export type UpdateCustomerParamsData = CustomerCoreData;
 
 interface IUpdateCustomerParams {
-  id: number;
+  id: string;
   data: UpdateCustomerParamsData;
 }
 

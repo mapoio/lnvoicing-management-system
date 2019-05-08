@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Form, Select } from 'antd';
-import { CustomerCoreData, customerStatus, customerType } from '@services/gql/customer';
+import { customerStatus, customerType, Customer } from '@services/gql/customer';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -8,16 +8,17 @@ const Option = Select.Option;
 interface IStatusProps {
   status: customerStatus;
   setStatus: (status: customerStatus) => void;
+  disabled?: boolean;
 }
 
 const StatusSelect = (props: IStatusProps) => {
-  const { status, setStatus } = props;
+  const { status, setStatus, disabled } = props;
   const statusOption = {
     [customerStatus.INACTIVE]: '停用',
     [customerStatus.ACTIVE]: '激活'
   };
   return (
-    <Select value={statusOption[status] || 'ACTIVE'} onChange={setStatus} disabled={!!statusOption[status]}>
+    <Select value={status || customerStatus.ACTIVE} onChange={setStatus} disabled={disabled}>
       {Object.keys(statusOption).map(key => (
         <Option key={key} value={key}>
           {statusOption[key]}
@@ -40,7 +41,7 @@ const TypeSelect = (props: ITypeProps) => {
     [customerType.SVIP]: 'SVIP'
   };
   return (
-    <Select value={typeOption[type] || 'NORMAL'} onChange={setType}>
+    <Select value={type || customerType.NORMAL} onChange={setType}>
       {Object.keys(typeOption).map(key => (
         <Option key={key} value={key}>
           {typeOption[key]}
@@ -51,8 +52,8 @@ const TypeSelect = (props: ITypeProps) => {
 };
 
 interface IFormProps {
-  data: Partial<CustomerCoreData>;
-  setData: (value: React.SetStateAction<Partial<CustomerCoreData>>) => void;
+  data: Partial<Customer>;
+  setData: (value: React.SetStateAction<Partial<Customer>>) => void;
 }
 
 export const CreateOrUpdateForm = (props: IFormProps) => {
@@ -98,7 +99,11 @@ export const CreateOrUpdateForm = (props: IFormProps) => {
         <TypeSelect type={data.type} setType={type => setData(Object.assign({}, data, { type }))} />
       </FormItem>
       <FormItem label="客户状态" required>
-        <StatusSelect status={data.status} setStatus={status => setData(Object.assign({}, data, { status }))} />
+        <StatusSelect
+          disabled={!!data.id}
+          status={data.status}
+          setStatus={status => setData(Object.assign({}, data, { status }))}
+        />
       </FormItem>
     </>
   );

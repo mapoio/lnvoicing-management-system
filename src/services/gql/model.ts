@@ -21,6 +21,14 @@ export interface GetModelsParams {
   limit: number;
 }
 
+export const modelGraphQLString = `
+id
+name
+remark
+created_at
+updated_at
+`;
+
 export class GetModels extends GraphQLHttp<GetModelsData, GetModelsParams> {
   public variables: GetModelsParams = {
     limit: 10
@@ -28,11 +36,7 @@ export class GetModels extends GraphQLHttp<GetModelsData, GetModelsParams> {
   public query = gql`
     query get($limit: Int) {
       models(limit: $limit) {
-        id
-        name
-        remark
-        created_at
-        updated_at
+        ${modelGraphQLString}
       }
     }
   `;
@@ -45,7 +49,7 @@ type TDeleteModelData = {
 export type DeleteModelData = GraphQLData<TDeleteModelData>;
 
 export interface DeleteModelParams {
-  id: number;
+  id: string;
 }
 
 export class DeleteModel extends GraphQLHttp<DeleteModelData, DeleteModelParams> {
@@ -69,7 +73,7 @@ export type UpdateModelData = GraphQLData<TUpdateModelData>;
 export type UpdateModelParamsData = Pick<Model, 'name' | 'remark'>;
 
 interface IUpdateModelParams {
-  id: number;
+  id: string;
   data: UpdateModelParamsData;
 }
 
@@ -78,11 +82,7 @@ export class UpdateModel extends GraphQLHttp<UpdateModelData, IUpdateModelParams
     mutation update($id: ID!, $data: editModelInput!) {
       updateModel(input: { where: { id: $id }, data: $data }) {
         model {
-          id
-          name
-          remark
-          created_at
-          updated_at
+          ${modelGraphQLString}
         }
       }
     }
@@ -106,11 +106,7 @@ export class CreateModel extends GraphQLHttp<createModelData, ICreateModelParams
     mutation create($data: ModelInput!) {
       createModel(input: { data: $data }) {
         model {
-          id
-          name
-          remark
-          created_at
-          updated_at
+          ${modelGraphQLString}
         }
       }
     }

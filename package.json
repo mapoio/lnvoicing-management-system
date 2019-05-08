@@ -33,6 +33,7 @@
     "antd": "^3.16.3",
     "axios": "^0.18.0",
     "bourbon": "^5.1.0",
+    "dayjs": "^1.8.13",
     "echarts": "^4.2.1",
     "echarts-for-react": "^2.0.14",
     "graphql": "^14.2.1",

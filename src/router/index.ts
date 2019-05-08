@@ -70,6 +70,28 @@ export const menu: IMenu[] = [
     icon: 'shop',
     component: 'Supplier',
     exact: true
+  },
+  {
+    id: 6,
+    title: '库存管理',
+    icon: 'layout'
+  },
+  {
+    id: 61,
+    pid: 6,
+    path: '/repertory/repertory',
+    title: '仓库管理',
+    icon: 'database',
+    component: 'Repertory',
+    exact: true
+  },
+  {
+    id: 7,
+    path: '/purchase',
+    title: '销售管理',
+    icon: 'barcode',
+    component: 'Purchase',
+    exact: true
   }
 ];
 

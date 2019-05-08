@@ -13,6 +13,7 @@ export interface UserInfo {
   msg: string;
   token: string;
   category: string;
+  id: string;
 }
 
 interface IState {
@@ -21,7 +22,12 @@ interface IState {
 }
 
 const initState: IState = {
-  userInfo: null,
+  userInfo: {
+    id: '1',
+    msg: '',
+    category: '',
+    token: ''
+  },
   loadding: false
 };
 
