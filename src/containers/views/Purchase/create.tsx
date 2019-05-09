@@ -1,93 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import * as styles from '@shared/style/index.scss';
 import { PurchaseStore } from '@store/purchase';
-import { Row, Col, Divider, Table } from 'antd';
-import { Purchase, purchaseStatus } from '@services/gql/purchase';
-import { formatTime } from '@utils/index';
+import { Row, Col, Divider, Table, InputNumber, Button, message, Input, Tooltip } from 'antd';
+import { formatTime, searchItem } from '@utils/index';
 import { Supplier } from '@services/gql/supplier';
 import { Purchaseitem } from '@services/gql/purchaseitem';
 import { ColumnProps } from 'antd/lib/table';
+import { SupplierSelect } from '@views/Supplier/service';
+import { GoodSelect } from '@views/Good/service';
+import { hashHistory } from '@store/router';
+import { Purchase } from '@services/gql/purchase';
 
-const statusOption = {
-  [purchaseStatus.BUILDED]: '已建立',
-  [purchaseStatus.CONFIRM]: '已确认',
-  [purchaseStatus.INVAILD]: '无效',
-  [purchaseStatus.STOCKIN]: '已入库'
-};
+const { TextArea } = Input;
 
-interface IPurchaseShow {
-  purchase: Purchase;
-}
-
-const UpdatePurchaseShow = (props: IPurchaseShow) => {
-  const purchase = props.purchase;
-  return (
-    <Row gutter={16}>
-      <Col span={16}>
-        <Row>
-          <Col className={styles.headCardItem} span={12}>
-            ID：{purchase.id}
-          </Col>
-          <Col className={styles.headCardItem} span={12}>
-            备注：{purchase.remark}
-          </Col>
-          <Col className={styles.headCardItem} span={12}>
-            更新时间：{formatTime(purchase.updated_at)}
-          </Col>
-          <Col className={styles.headCardItem} span={12}>
-            创建时间：{formatTime(purchase.created_at)}
-          </Col>
-        </Row>
-      </Col>
-      <Col className={`${styles.headCardItem} ${styles.end}`} span={6} offset={2}>
-        <div className={styles.rightCard}>
-          <p>状态</p>
-          <h2>{statusOption[purchase.status]}</h2>
-        </div>
-        <div className={styles.rightCard}>
-          <p>金额</p>
-          <h2>￥{purchase.money}</h2>
-        </div>
-      </Col>
-    </Row>
-  );
-};
-
-const PurchaseShow = (props: IPurchaseShow) => {
-  const purchase = props.purchase;
-  return (
-    <div className={styles.contentCard}>
-      <h3 className={styles.titleCard}>采购单</h3>
-      <Row gutter={16}>
-        <Col className={styles.itemCard} span={8}>
-          ID：{purchase.id}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          单号：{purchase.batch}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          总金额：{purchase.money}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          备注：{purchase.remark}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          更新时间：{formatTime(purchase.updated_at)}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          创建时间：{formatTime(purchase.created_at)}
-        </Col>
-      </Row>
-    </div>
-  );
-};
-
-// TODO: 使用Goods做的操作
 const columns: Array<ColumnProps<Purchaseitem>> = [
-  {
-    title: '唯一ID',
-    dataIndex: 'id'
-  },
   {
     title: '品牌',
     dataIndex: 'good.brand.name'
@@ -127,31 +53,8 @@ const columns: Array<ColumnProps<Purchaseitem>> = [
   {
     title: '数量',
     dataIndex: 'amount'
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'created_at',
-    render: formatTime
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'updated_at',
-    render: formatTime
   }
 ];
-
-interface IPurchaseitemShow {
-  purchaseitems: Purchaseitem[];
-}
-export const Tables = (props: IPurchaseitemShow) => {
-  const list = props.purchaseitems;
-  return (
-    <div className={styles.contentCard}>
-      <h3 className={styles.titleCard}>采购项</h3>
-      <Table<Purchaseitem> dataSource={list} columns={columns} rowKey={r => `${r.id}`} pagination={false} />
-    </div>
-  );
-};
 
 interface ISupplierShow {
   supplier: Supplier;
@@ -160,35 +63,32 @@ interface ISupplierShow {
 const SupplierShow = (props: ISupplierShow) => {
   const supplier = props.supplier;
   return (
-    <div className={styles.contentCard}>
-      <h3 className={styles.titleCard}>供应商</h3>
-      <Row gutter={16}>
-        <Col className={styles.itemCard} span={8}>
-          ID：{supplier.id}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          名称：{supplier.name}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          地址：{supplier.address}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          电话：{supplier.phone}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          联系人姓名：{supplier.manageName}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          联系人电话：{supplier.managePhone}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          更新时间：{formatTime(supplier.updated_at)}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          创建时间：{formatTime(supplier.created_at)}
-        </Col>
-      </Row>
-    </div>
+    <Row gutter={16}>
+      <Col className={styles.itemCard} span={8}>
+        ID：{supplier.id}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        名称：{supplier.name}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        地址：{supplier.address}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        电话：{supplier.phone}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        联系人姓名：{supplier.manageName}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        联系人电话：{supplier.managePhone}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        更新时间：{formatTime(supplier.updated_at)}
+      </Col>
+      <Col className={styles.itemCard} span={8}>
+        创建时间：{formatTime(supplier.created_at)}
+      </Col>
+    </Row>
   );
 };
 
@@ -198,6 +98,70 @@ interface ICreatOrView {
 
 export const Create = (props: ICreatOrView) => {
   const purchases = PurchaseStore.useStore(s => s).list;
+  const [supplier, setSupplier] = useState({} as Supplier);
+  const [purchaseItem, setPurchaseItem] = useState({} as Purchaseitem);
+  const [purchaseitems, setPurchaseItems] = useState([] as Purchaseitem[]);
+  const [remark, setRemark] = useState('');
+  const [createLoading, setCreateLoading] = useState(false);
+  const onCreate = async () => {
+    if (!supplier.id) {
+      message.error('请选择供应商');
+      return null;
+    } else if (purchaseitems.length < 1) {
+      message.error('请添加采购项');
+      return null;
+    }
+    const data = {
+      supplier,
+      purchaseitems,
+      remark
+    };
+    setCreateLoading(true);
+    const warn = message.loading('正在创建采购单中，请勿关闭', 0);
+    try {
+      await PurchaseStore.dispatch('create', data);
+      message.success('成功');
+      hashHistory.push('/purchase');
+    } catch (e) {
+      setCreateLoading(false);
+      message.error(e.message);
+    } finally {
+      warn();
+    }
+  };
+  const removePurchaseItem = (index: number) => {
+    const items = [...purchaseitems];
+    items.splice(index - 1, 1);
+    setPurchaseItems(items);
+  };
+  const addPurchaseItem = () => {
+    if (!purchaseItem.good || !purchaseItem.amount || !purchaseItem.price) {
+      message.warn('添加采购项失败，请选择完整的商品信息和采购数量与价格');
+      return null;
+    }
+    const index = searchItem(purchaseItem.good.id, purchaseitems.map(item => item.good)).index;
+    if (index > -1) {
+      const item = purchaseitems.concat([]);
+      item[index] = purchaseItem;
+      message.warn('添加了相同商品项，已默认覆盖');
+      setPurchaseItems(item);
+      return null;
+    }
+    setPurchaseItems(purchaseitems.concat([purchaseItem]));
+  };
+  const col = columns.concat([
+    {
+      key: 'good.id',
+      title: '操作',
+      render: (_, _a, index) => {
+        return (
+          <Tooltip title="删除本条数据">
+            <Button icon="delete" type="danger" shape="circle" onClick={() => removePurchaseItem(index)} />
+          </Tooltip>
+        );
+      }
+    }
+  ]);
   useEffect(() => {
     if (purchases.length < 1) {
       PurchaseStore.dispatch('getList', 500);
@@ -207,19 +171,79 @@ export const Create = (props: ICreatOrView) => {
   if (purchases.length < 1) {
     return null;
   }
-  const purchase = purchases[0];
-  const supplier = purchase.supplier;
   return (
     <>
       <div className={styles.tabHead}>
-        <p>耗材进销存管理系统</p>
-        <h2>{purchase.batch}</h2>
-        <UpdatePurchaseShow purchase={purchase} />
+        <p>
+          耗材进销存管理系统 / <a href="#/purchase">销售管理</a>
+        </p>
+        <h2>创建采购单</h2>
       </div>
       <div className={styles.tab}>
-        <SupplierShow supplier={supplier} />
+        <div className={styles.contentCard}>
+          <h3 className={styles.titleCard}>
+            选择供应商：
+            <SupplierSelect supplier={supplier} setSupplier={setSupplier} active={true} />
+          </h3>
+          {supplier.id ? <SupplierShow supplier={supplier} /> : null}
+        </div>
         <Divider className={styles.cardDivider} />
-        <Tables purchaseitems={purchase.purchaseitems} />
+        <div className={styles.contentCard}>
+          <h3 className={styles.titleCard}>添加采购项</h3>
+          <div>
+            商品：
+            <GoodSelect
+              good={purchaseItem.good}
+              setGood={good => setPurchaseItem(Object.assign({}, purchaseItem, { good }))}
+              active={true}
+            />
+            <Divider type="vertical" />
+            单位价格：
+            <InputNumber
+              step={0.01}
+              value={purchaseItem.price}
+              onChange={price => setPurchaseItem(Object.assign({}, purchaseItem, { price }))}
+            />
+            <Divider type="vertical" />
+            采购数量：
+            <InputNumber
+              min={1}
+              value={purchaseItem.amount}
+              onChange={amount => setPurchaseItem(Object.assign({}, purchaseItem, { amount }))}
+            />
+            <Divider type="vertical" />
+            <Button onClick={addPurchaseItem}>添加采购项</Button>
+          </div>
+          <Table<Purchaseitem>
+            dataSource={purchaseitems}
+            columns={col}
+            rowKey={r => `${r.amount}=${r.price}=${r.good.id}`}
+            pagination={false}
+          />
+          <div className={styles.totalBox}>
+            <div className={styles.total}>
+              <p>
+                总数量：<span>{purchaseitems.reduce((total, item) => (total += item.amount), 0)}</span>
+              </p>
+              <p>
+                总价格：<span>{purchaseitems.reduce((total, item) => (total += item.price * item.amount), 0)}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <Divider className={styles.cardDivider} />
+        <div className={styles.contentCard}>
+          <h3 className={styles.titleCard}>备注</h3>
+          <TextArea value={remark} onChange={e => setRemark(e.target.value)} rows={4} />
+        </div>
+        <div className={styles.confirmBox}>
+          <Button type="primary" loading={createLoading} onClick={onCreate}>
+            提交
+          </Button>
+          <Button type="default" onClick={() => hashHistory.push('/purchase')}>
+            返回
+          </Button>
+        </div>
       </div>
     </>
   );

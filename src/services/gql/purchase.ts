@@ -20,6 +20,15 @@ export interface Purchase extends BaseModel {
   supplier: Supplier;
 }
 
+export interface ICreatePurchase {
+  batch: string;
+  remark: string;
+  money: number;
+  status: purchaseStatus;
+  purchaseitems: any;
+  supplier: string;
+}
+
 export type PurchaseCoreData = Pick<Purchase, Exclude<keyof Purchase, 'id' | 'created_at' | 'updated_at'>>;
 
 export interface OnePurchase {
@@ -125,7 +134,7 @@ export type createPurchaseData = GraphQLData<TCreatePurchaseData>;
 export type CreatePurchaseParamsData = PurchaseCoreData;
 
 interface ICreatePurchaseParams {
-  data: CreatePurchaseParamsData;
+  data: ICreatePurchase;
 }
 
 export class CreatePurchase extends GraphQLHttp<createPurchaseData, ICreatePurchaseParams> {

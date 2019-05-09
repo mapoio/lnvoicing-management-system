@@ -12,7 +12,15 @@ export interface Purchaseitem extends BaseModel {
   price: number;
   amount: number;
   status: purchaseitemStatus;
-  goods: Good;
+  good: Good;
+}
+
+export interface ICreatePurchaseitem {
+  price: number;
+  amount: number;
+  status: purchaseitemStatus;
+  good: string;
+  purchase: string;
 }
 
 export type PurchaseitemCoreData = Pick<Purchaseitem, Exclude<keyof Purchaseitem, 'id' | 'created_at' | 'updated_at'>>;
@@ -116,7 +124,7 @@ export type createPurchaseitemData = GraphQLData<TCreatePurchaseitemData>;
 export type CreatePurchaseitemParamsData = PurchaseitemCoreData;
 
 interface ICreatePurchaseitemParams {
-  data: CreatePurchaseitemParamsData;
+  data: ICreatePurchaseitem;
 }
 
 export class CreatePurchaseitem extends GraphQLHttp<createPurchaseitemData, ICreatePurchaseitemParams> {

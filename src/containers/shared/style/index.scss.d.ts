@@ -2,6 +2,7 @@
 // Please do not change this file!
 interface CssExports {
   cardDivider: string;
+  confirmBox: string;
   contain: string;
   contentCard: string;
   end: string;
@@ -11,6 +12,8 @@ interface CssExports {
   tab: string;
   tabHead: string;
   titleCard: string;
+  total: string;
+  totalBox: string;
 }
 declare var cssExports: CssExports;
 export = cssExports;

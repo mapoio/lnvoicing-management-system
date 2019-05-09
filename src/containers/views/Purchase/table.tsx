@@ -19,29 +19,21 @@ const OptionCol = (props: IOptionColProps) => {
   const record = props.record;
   const [activeLoading, setActiveLoading] = useState(false);
   const [updateShow, setUpdateShow] = useState(false);
-  const onUpdate = () => {
+  const onView = () => {
     hashHistory.push(`/purchase?batch=${record.id}`);
   };
-  const activeShow =
-    {
-      [purchaseStatus.BUILDED]: {
-        title: '停用本条数据',
-        icon: 'stop'
-      },
-      [purchaseStatus.INVAILD]: {
-        title: '启用本条数据',
-        icon: 'check'
-      }
-    }[record.status] || {};
   const onChangeActive = async () => {
-    const newData = { ...record };
-    newData.status = record.status === purchaseStatus.BUILDED ? purchaseStatus.INVAILD : purchaseStatus.BUILDED;
+    const purchaseitems = record.purchaseitems.map(item => item.id);
+    const newData: any = { ...record };
+    newData.purchaseitems = purchaseitems;
+    newData.supplier = record.supplier.id;
+    newData.status = purchaseStatus.INVAILD;
     setActiveLoading(true);
     try {
       await dispatch('update', newData);
-      message.success('成功' + activeShow.title);
+      message.success('停用采购单成功');
     } catch (e) {
-      message.error(activeShow.title + '失败！');
+      message.error('停用采购单失败！');
     }
     setActiveLoading(false);
   };
@@ -49,18 +41,12 @@ const OptionCol = (props: IOptionColProps) => {
     <>
       <UpdateModal show={updateShow} onShow={setUpdateShow} data={record} />
       {record.status === purchaseStatus.BUILDED || record.status === purchaseStatus.CONFIRM ? (
-        <Tooltip title={activeShow.title}>
-          <Button
-            icon={activeShow.icon}
-            type="default"
-            shape="circle"
-            loading={activeLoading}
-            onClick={onChangeActive}
-          />
+        <Tooltip title={'停用本采购单'}>
+          <Button icon={'stop'} type="default" shape="circle" loading={activeLoading} onClick={onChangeActive} />
         </Tooltip>
       ) : null}
       <Tooltip title="查看详情">
-        <Button icon="eye" type="default" shape="circle" onClick={onUpdate} />
+        <Button icon="eye" type="default" shape="circle" onClick={onView} />
       </Tooltip>
     </>
   );
@@ -112,7 +98,7 @@ const columns: Array<ColumnProps<Purchase>> = [
             text: '已建立'
           },
           [purchaseStatus.CONFIRM]: {
-            color: 'orange',
+            color: '#108ee9',
             text: '已确认'
           },
           [purchaseStatus.STOCKIN]: {
@@ -143,7 +129,7 @@ export const Tables = () => {
   const [showCreate, setShowCreate] = useState(false);
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const onShowCreate = () => {
-    setShowCreate(true);
+    hashHistory.push(`/purchase?batch`);
   };
   const getData = async (num: number = 5) => {
     setLoding(true);

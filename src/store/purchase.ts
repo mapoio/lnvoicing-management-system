@@ -5,9 +5,12 @@ import {
   DeletePurchase,
   CreatePurchaseParamsData,
   CreatePurchase,
-  UpdatePurchase
+  UpdatePurchase,
+  purchaseStatus
 } from '@services/gql/purchase';
 import { handleGraphQLError } from '@utils/index';
+import dayjs from 'dayjs';
+import { purchaseitemStatus, CreatePurchaseitem } from '@services/gql/purchaseitem';
 
 interface IState {
   list: Purchase[];
@@ -21,6 +24,7 @@ const LIST = new GetPurchases();
 const DELETE = new DeletePurchase();
 const CREATE = new CreatePurchase();
 const UPDATE = new UpdatePurchase();
+const CREATEITEM = new CreatePurchaseitem();
 
 const searchItem = <T extends any[]>(id: string, source: T) => {
   const index = source.findIndex(item => item.id === id);
@@ -60,8 +64,32 @@ const { useStore, dispatch } = createStore({
       dispatch('delete', id);
     },
     async create(data: CreatePurchaseParamsData) {
-      const res = handleGraphQLError(await CREATE.send({ data }));
-      dispatch('createOne', res.data.createPurchase.purchase);
+      const purchase = {
+        batch: `CG${dayjs().format('YYMMDDHHmmss')}`,
+        status: purchaseStatus.CONFIRM,
+        money: data.purchaseitems.reduce((total, item) => (total += item.amount * item.price), 0),
+        supplier: data.supplier.id,
+        remark: data.remark,
+        purchaseitems: []
+      };
+      const res = handleGraphQLError(await CREATE.send({ data: purchase }));
+      const purchaseItems = data.purchaseitems.map(item => {
+        return {
+          price: item.price,
+          amount: item.amount,
+          status: purchaseitemStatus.ACTIVE,
+          good: item.good.id,
+          purchase: res.data.createPurchase.purchase.id
+        };
+      });
+      const items = await Promise.all(
+        purchaseItems.map(async item => {
+          return handleGraphQLError(await CREATEITEM.send({ data: item })).data.createPurchaseitem.purchaseitem;
+        })
+      );
+      const payload = res.data.createPurchase.purchase;
+      payload.purchaseitems = items;
+      dispatch('createOne', payload);
     },
     async update(item: Purchase) {
       const { id, created_at, updated_at, ...data } = item;

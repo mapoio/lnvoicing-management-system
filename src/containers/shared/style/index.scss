@@ -59,3 +59,32 @@
     margin-left: $margin-size;
   }
 }
+
+.totalBox {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: $margin-size / 2;
+
+  .total {
+    width: 200px;
+    text-align: left;
+
+    p {
+      margin-bottom: 0;
+    }
+
+    span {
+      font-size: #{$margin-size * 2};
+    }
+  }
+}
+
+.confirmBox {
+  text-align: center;
+  margin-top: $margin-size * 4;
+  margin-bottom: $margin-size * 2;
+
+  button {
+    margin-right: $margin-size;
+  }
+}
