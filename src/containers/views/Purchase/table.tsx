@@ -31,8 +31,9 @@ const OptionCol = (props: IOptionColProps) => {
       message.success('停用采购单成功');
     } catch (e) {
       message.error('停用采购单失败！');
+    } finally {
+      setActiveLoading(false);
     }
-    setActiveLoading(false);
   };
   return (
     <>
@@ -122,7 +123,6 @@ export const Tables = () => {
   const list = useStore(s => s.list);
   const [loading, setLoding] = useState(false);
   const [search, setSearch] = useState('');
-  const [showCreate, setShowCreate] = useState(false);
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const onShowCreate = () => {
     hashHistory.push(`/purchase?batch`);
@@ -134,8 +134,9 @@ export const Tables = () => {
       message.success('获取采购单数据成功');
     } catch (error) {
       message.error(error.message);
+    } finally {
+      setLoding(false);
     }
-    setLoding(false);
   };
   useEffect(() => {
     if (list.length < 1) {
@@ -145,7 +146,6 @@ export const Tables = () => {
   }, []);
   return (
     <div className={styles.contain}>
-      {/* <CreateModal show={showCreate} onShow={setShowCreate} /> */}
       <Row gutter={12}>
         <Col span={8}>
           <Input placeholder="输入批号搜索" value={search} onChange={onChangeSearch} />

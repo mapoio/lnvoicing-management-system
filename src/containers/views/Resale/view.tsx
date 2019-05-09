@@ -4,7 +4,7 @@ import { ResaleStore } from '@store/resale';
 import { Row, Col, Divider, Table } from 'antd';
 import { Resale, resaleStatus } from '@services/gql/resale';
 import { formatTime, searchItem } from '@utils/index';
-import { Supplier } from '@services/gql/supplier';
+import { Customer } from '@services/gql/customer';
 import { Resaleitem } from '@services/gql/resaleitem';
 import { ColumnProps } from 'antd/lib/table';
 
@@ -123,39 +123,39 @@ export const Tables = (props: IResaleitemShow) => {
   );
 };
 
-interface ISupplierShow {
-  supplier: Supplier;
+interface ICustomerShow {
+  customer: Customer;
 }
 
-const SupplierShow = (props: ISupplierShow) => {
-  const supplier = props.supplier;
+const CustomerShow = (props: ICustomerShow) => {
+  const customer = props.customer;
   return (
     <div className={styles.contentCard}>
       <h3 className={styles.titleCard}>客户</h3>
       <Row gutter={16}>
         <Col className={styles.itemCard} span={8}>
-          ID：{supplier.id}
+          ID：{customer.id}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          名称：{supplier.name}
+          名称：{customer.name}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          地址：{supplier.address}
+          地址：{customer.address}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          电话：{supplier.phone}
+          电话：{customer.phone}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          联系人姓名：{supplier.manageName}
+          联系人姓名：{customer.manageName}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          联系人电话：{supplier.managePhone}
+          联系人电话：{customer.managePhone}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          更新时间：{formatTime(supplier.updated_at)}
+          更新时间：{formatTime(customer.updated_at)}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          创建时间：{formatTime(supplier.created_at)}
+          创建时间：{formatTime(customer.created_at)}
         </Col>
       </Row>
     </div>
@@ -178,7 +178,7 @@ export const View = (props: IView) => {
   if (!resale) {
     return <h2>不存在此单号退货单</h2>;
   }
-  const supplier = resale.supplier;
+  const customer = resale.customer;
   return (
     <>
       <div className={styles.tabHead}>
@@ -189,7 +189,7 @@ export const View = (props: IView) => {
         <UpdateResaleShow resale={resale} />
       </div>
       <div className={styles.tab}>
-        <SupplierShow supplier={supplier} />
+        <CustomerShow customer={customer} />
         <Divider className={styles.cardDivider} />
         <Tables resaleitems={resale.resaleitems} />
       </div>

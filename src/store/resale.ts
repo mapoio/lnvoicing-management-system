@@ -65,7 +65,7 @@ const { useStore, dispatch } = createStore({
     },
     async create(data: CreateResaleParamsData) {
       const resale = {
-        batch: `CG${dayjs().format('YYMMDDHHmmss')}`,
+        batch: `TH${dayjs().format('YYMMDDHHmmss')}`,
         status: resaleStatus.CONFIRM,
         money: data.resaleitems.reduce((total, item) => (total += item.amount * item.price), 0),
         customer: data.customer.id,

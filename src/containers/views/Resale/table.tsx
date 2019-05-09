@@ -28,9 +28,9 @@ const OptionCol = (props: IOptionColProps) => {
     setActiveLoading(true);
     try {
       await dispatch('update', newData);
-      message.success('停用采购单成功');
+      message.success('停用退货单成功');
     } catch (e) {
-      message.error('停用采购单失败！');
+      message.error('停用退货单失败！');
     } finally {
       setActiveLoading(false);
     }
@@ -38,7 +38,7 @@ const OptionCol = (props: IOptionColProps) => {
   return (
     <>
       {record.status === resaleStatus.BUILDED || record.status === resaleStatus.CONFIRM ? (
-        <Tooltip title={'停用本采购单'}>
+        <Tooltip title={'停用本退货单'}>
           <Button icon={'stop'} type="default" shape="circle" loading={activeLoading} onClick={onChangeActive} />
         </Tooltip>
       ) : null}
@@ -123,7 +123,6 @@ export const Tables = () => {
   const list = useStore(s => s.list);
   const [loading, setLoding] = useState(false);
   const [search, setSearch] = useState('');
-  const [showCreate, setShowCreate] = useState(false);
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const onShowCreate = () => {
     hashHistory.push(`/resale?batch`);
@@ -132,11 +131,12 @@ export const Tables = () => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取采购单数据成功');
+      message.success('获取退货单数据成功');
     } catch (error) {
       message.error(error.message);
+    } finally {
+      setLoding(false);
     }
-    setLoding(false);
   };
   useEffect(() => {
     if (list.length < 1) {
@@ -146,7 +146,6 @@ export const Tables = () => {
   }, []);
   return (
     <div className={styles.contain}>
-      {/* <CreateModal show={showCreate} onShow={setShowCreate} /> */}
       <Row gutter={12}>
         <Col span={8}>
           <Input placeholder="输入批号搜索" value={search} onChange={onChangeSearch} />

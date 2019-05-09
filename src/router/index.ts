@@ -89,7 +89,7 @@ export const menu: IMenu[] = [
     id: 7,
     path: '/purchase',
     title: '采购管理',
-    icon: 'barcode',
+    icon: 'rise',
     component: 'Purchase',
     exact: true
   },
@@ -97,7 +97,7 @@ export const menu: IMenu[] = [
     id: 8,
     path: '/resale',
     title: '退货管理',
-    icon: 'barcode',
+    icon: 'fall',
     component: 'Resale',
     exact: true
   }
