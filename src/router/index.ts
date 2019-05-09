@@ -92,6 +92,14 @@ export const menu: IMenu[] = [
     icon: 'barcode',
     component: 'Purchase',
     exact: true
+  },
+  {
+    id: 8,
+    path: '/resale',
+    title: '退货管理',
+    icon: 'barcode',
+    component: 'Resale',
+    exact: true
   }
 ];
 

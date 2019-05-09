@@ -20,7 +20,8 @@ export const asynchronousComponents = {
   Supplier: loadComponent(() => import(/* webpackChunkName: "Supplier" */ '@views/Supplier')),
   Good: loadComponent(() => import(/* webpackChunkName: "Good" */ '@views/Good')),
   Repertory: loadComponent(() => import(/* webpackChunkName: "Repertory" */ '@views/Repertory')),
-  Purchase: loadComponent(() => import(/* webpackChunkName: "Purchase" */ '@views/Purchase'))
+  Purchase: loadComponent(() => import(/* webpackChunkName: "Purchase" */ '@views/Purchase')),
+  Resale: loadComponent(() => import(/* webpackChunkName: "Resale" */ '@views/Resale'))
 };
 
 export type AsynchronousComponentKeys = keyof typeof asynchronousComponents;

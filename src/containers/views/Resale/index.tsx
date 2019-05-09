@@ -11,7 +11,7 @@ const Main = () => {
     <>
       <div className={styles.tabHead}>
         <p>耗材进销存管理系统</p>
-        <h2>采购管理</h2>
+        <h2>退货管理</h2>
       </div>
       <div className={styles.tab}>
         <Tables />
@@ -31,7 +31,7 @@ const CreatOrView = (props: ICreatOrView) => {
 
 const Brand = () => {
   React.useEffect(() => {
-    const title = '耗材进销存管理系统 - 采购单管理';
+    const title = '耗材进销存管理系统 - 退货单管理';
     document.title = title;
     return () => {
       document.title = '耗材进销存管理系统';

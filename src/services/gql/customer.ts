@@ -39,6 +39,19 @@ export interface GetCustomersParams {
   limit: number;
 }
 
+export const customerGraphQLString = `
+id
+name
+phone
+address
+manageName
+managePhone
+type
+status
+created_at
+updated_at
+`;
+
 export class GetCustomers extends GraphQLHttp<GetCustomersData, GetCustomersParams> {
   public variables: GetCustomersParams = {
     limit: 10
@@ -46,16 +59,7 @@ export class GetCustomers extends GraphQLHttp<GetCustomersData, GetCustomersPara
   public query = gql`
     query get($limit: Int) {
       customers(limit: $limit, sort: "updated_at:desc") {
-        id
-        name
-        phone
-        address
-        manageName
-        managePhone
-        type
-        status
-        created_at
-        updated_at
+        ${customerGraphQLString}
       }
     }
   `;
@@ -101,16 +105,7 @@ export class UpdateCustomer extends GraphQLHttp<UpdateCustomerData, IUpdateCusto
     mutation update($id: ID!, $data: editCustomerInput!) {
       updateCustomer(input: { where: { id: $id }, data: $data }) {
         customer {
-          id
-          name
-          phone
-          address
-          manageName
-          managePhone
-          type
-          status
-          created_at
-          updated_at
+          ${customerGraphQLString}
         }
       }
     }
@@ -134,16 +129,7 @@ export class CreateCustomer extends GraphQLHttp<createCustomerData, ICreateCusto
     mutation create($data: CustomerInput!) {
       createCustomer(input: { data: $data }) {
         customer {
-          id
-          name
-          phone
-          address
-          manageName
-          managePhone
-          type
-          status
-          created_at
-          updated_at
+          ${customerGraphQLString}
         }
       }
     }
