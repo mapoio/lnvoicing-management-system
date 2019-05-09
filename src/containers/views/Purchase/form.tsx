@@ -11,14 +11,15 @@ interface IStatusProps {
   disabled?: boolean;
 }
 
+export const statusOption = {
+  [purchaseStatus.BUILDED]: '已建立',
+  [purchaseStatus.CONFIRM]: '已确认',
+  [purchaseStatus.INVAILD]: '无效',
+  [purchaseStatus.STOCKIN]: '已入库'
+};
+
 const StatusSelect = (props: IStatusProps) => {
   const { status, setStatus, disabled } = props;
-  const statusOption = {
-    [purchaseStatus.BUILDED]: '已建立',
-    [purchaseStatus.CONFIRM]: '已确认',
-    [purchaseStatus.INVAILD]: '无效',
-    [purchaseStatus.STOCKIN]: '已入库'
-  };
   return (
     <Select value={statusOption[status] || 'ACTIVE'} onChange={setStatus} disabled={disabled}>
       {Object.keys(statusOption).map(key => (

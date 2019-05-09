@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import { GraphQLHttp } from '@utils/http';
 import { GraphQLData, BaseModel } from '@utils/index';
 import { Purchaseitem, purchaseitemGraphQLString } from './purchaseitem';
-import { supplierGraphQLString } from './supplier';
+import { supplierGraphQLString, Supplier } from './supplier';
 
 export enum purchaseStatus {
   BUILDED = 'BUILDED',
@@ -16,7 +16,8 @@ export interface Purchase extends BaseModel {
   remark: string;
   money: number;
   status: purchaseStatus;
-  purchaseitems: Purchaseitem;
+  purchaseitems: Purchaseitem[];
+  supplier: Supplier;
 }
 
 export type PurchaseCoreData = Pick<Purchase, Exclude<keyof Purchase, 'id' | 'created_at' | 'updated_at'>>;

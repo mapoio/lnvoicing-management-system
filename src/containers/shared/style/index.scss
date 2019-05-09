@@ -18,6 +18,42 @@
   flex-direction: column;
 }
 
+.contentCard {
+  padding: $margin-size;
+
+  .titleCard {
+    margin-bottom: #{$margin-size + 4};
+  }
+
+  .itemCard {
+    margin-bottom: $margin-size;
+  }
+}
+
+.headCardItem {
+  display: flex;
+  margin-bottom: #{$margin-size - 4};
+
+  .rightCard {
+    text-align: right;
+    width: 120px;
+
+    p,
+    h2 {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.end {
+  padding-right: #{$margin-size * 2} !important;
+  justify-content: flex-end;
+}
+
+.cardDivider {
+  margin: $margin-size !important;
+}
+
 .contain {
   button {
     margin-left: $margin-size;

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import * as styles from '@shared/style/index.scss';
 import { PurchaseStore } from '@store/purchase';
 import { Row, Col, Divider, Table } from 'antd';
 import { Purchase, purchaseStatus } from '@services/gql/purchase';
-import { formatTime } from '@utils/index';
+import { formatTime, searchItem } from '@utils/index';
 import { Supplier } from '@services/gql/supplier';
 import { Purchaseitem } from '@services/gql/purchaseitem';
 import { ColumnProps } from 'antd/lib/table';
@@ -53,36 +53,6 @@ const UpdatePurchaseShow = (props: IPurchaseShow) => {
   );
 };
 
-const PurchaseShow = (props: IPurchaseShow) => {
-  const purchase = props.purchase;
-  return (
-    <div className={styles.contentCard}>
-      <h3 className={styles.titleCard}>采购单</h3>
-      <Row gutter={16}>
-        <Col className={styles.itemCard} span={8}>
-          ID：{purchase.id}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          单号：{purchase.batch}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          总金额：{purchase.money}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          备注：{purchase.remark}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          更新时间：{formatTime(purchase.updated_at)}
-        </Col>
-        <Col className={styles.itemCard} span={8}>
-          创建时间：{formatTime(purchase.created_at)}
-        </Col>
-      </Row>
-    </div>
-  );
-};
-
-// TODO: 使用Goods做的操作
 const columns: Array<ColumnProps<Purchaseitem>> = [
   {
     title: '唯一ID',
@@ -192,11 +162,11 @@ const SupplierShow = (props: ISupplierShow) => {
   );
 };
 
-interface ICreatOrView {
+interface IView {
   batchId: string;
 }
 
-export const Create = (props: ICreatOrView) => {
+export const View = (props: IView) => {
   const purchases = PurchaseStore.useStore(s => s).list;
   useEffect(() => {
     if (purchases.length < 1) {
@@ -204,15 +174,17 @@ export const Create = (props: ICreatOrView) => {
     }
     return () => false;
   }, []);
-  if (purchases.length < 1) {
-    return null;
+  const purchase = searchItem(props.batchId, purchases).data;
+  if (!purchase) {
+    return <h2>不存在此单号采购单</h2>;
   }
-  const purchase = purchases[0];
   const supplier = purchase.supplier;
   return (
     <>
       <div className={styles.tabHead}>
-        <p>耗材进销存管理系统</p>
+        <p>
+          耗材进销存管理系统 / <a href="#/purchase">销售管理</a>
+        </p>
         <h2>{purchase.batch}</h2>
         <UpdatePurchaseShow purchase={purchase} />
       </div>
