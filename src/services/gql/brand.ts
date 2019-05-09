@@ -39,7 +39,7 @@ export class GetBrands extends GraphQLHttp<GetBrandsData, GetBrandsParams> {
   };
   public query = gql`
     query get($limit: Int) {
-      brands(limit: $limit) {
+      brands(limit: $limit, sort: "updated_at:desc") {
         ${brandGraphQLString}
       }
     }

@@ -64,7 +64,7 @@ export class GetGoods extends GraphQLHttp<GetGoodsData, GetGoodsParams> {
   };
   public query = gql`
     query get($limit: Int) {
-      goods(limit: $limit) {
+      goods(limit: $limit, sort: "updated_at:desc") {
         ${goodGraphQLString}
       }
     }

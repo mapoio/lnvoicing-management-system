@@ -63,7 +63,7 @@ export class GetStocks extends GraphQLHttp<GetStocksData, GetStocksParams> {
   };
   public query = gql`
     query get($limit: Int) {
-      stocks(limit: $limit) {
+      stocks(limit: $limit, sort: "updated_at:desc") {
         ${stockGraphQLString}
       }
     }

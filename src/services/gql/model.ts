@@ -35,7 +35,7 @@ export class GetModels extends GraphQLHttp<GetModelsData, GetModelsParams> {
   };
   public query = gql`
     query get($limit: Int) {
-      models(limit: $limit) {
+      models(limit: $limit, sort: "updated_at:desc") {
         ${modelGraphQLString}
       }
     }

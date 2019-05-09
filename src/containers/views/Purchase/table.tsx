@@ -3,8 +3,6 @@ import { Table, Button, message, Tooltip, Input, Row, Col, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { PurchaseStore } from '@store/purchase';
 import { Purchase, purchaseStatus } from '@services/gql/purchase';
-// import { CreateModal } from './create';
-import { UpdateModal } from './update';
 import * as styles from '@shared/style/index.scss';
 import { formatTime } from '@utils/index';
 import { hashHistory } from '@store/router';
@@ -18,7 +16,6 @@ interface IOptionColProps {
 const OptionCol = (props: IOptionColProps) => {
   const record = props.record;
   const [activeLoading, setActiveLoading] = useState(false);
-  const [updateShow, setUpdateShow] = useState(false);
   const onView = () => {
     hashHistory.push(`/purchase?batch=${record.id}`);
   };
@@ -39,7 +36,6 @@ const OptionCol = (props: IOptionColProps) => {
   };
   return (
     <>
-      <UpdateModal show={updateShow} onShow={setUpdateShow} data={record} />
       {record.status === purchaseStatus.BUILDED || record.status === purchaseStatus.CONFIRM ? (
         <Tooltip title={'停用本采购单'}>
           <Button icon={'stop'} type="default" shape="circle" loading={activeLoading} onClick={onChangeActive} />

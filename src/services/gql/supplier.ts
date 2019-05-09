@@ -58,7 +58,7 @@ export class GetSuppliers extends GraphQLHttp<GetSuppliersData, GetSuppliersPara
   };
   public query = gql`
     query get($limit: Int) {
-      suppliers(limit: $limit) {
+      suppliers(limit: $limit, sort: "updated_at:desc") {
         ${supplierGraphQLString}
       }
     }

@@ -88,7 +88,7 @@ export const menu: IMenu[] = [
   {
     id: 7,
     path: '/purchase',
-    title: '销售管理',
+    title: '采购管理',
     icon: 'barcode',
     component: 'Purchase',
     exact: true

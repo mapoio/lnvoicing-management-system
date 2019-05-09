@@ -45,7 +45,7 @@ export class GetCustomers extends GraphQLHttp<GetCustomersData, GetCustomersPara
   };
   public query = gql`
     query get($limit: Int) {
-      customers(limit: $limit) {
+      customers(limit: $limit, sort: "updated_at:desc") {
         id
         name
         phone

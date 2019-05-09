@@ -48,7 +48,7 @@ export class GetRepertorys extends GraphQLHttp<GetRepertorysData, GetRepertorysP
   };
   public query = gql`
     query get($limit: Int) {
-      repertorys: repertories(limit: $limit) {
+      repertorys: repertories(limit: $limit, sort: "updated_at:desc") {
         ${repertoryGraphQLString}
       }
     }

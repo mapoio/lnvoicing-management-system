@@ -4,7 +4,7 @@ import { GraphQLData } from '@utils/index';
 
 const getGoodses = gql`
   query getGoods($limit: Int) {
-    goods(limit: $limit) {
+    goods(limit: $limit, sort: "updated_at:desc") {
       id
       speedLevel
       specification
@@ -27,7 +27,7 @@ const getGoodses = gql`
 
 const getModel = gql`
   query getModel($limit: Int) {
-    models(limit: $limit) {
+    models(limit: $limit, sort: "updated_at:desc") {
       id
       name
       remark
@@ -37,7 +37,7 @@ const getModel = gql`
 
 const getBrand = gql`
   query getBrand($limit: Int) {
-    brands(limit: $limit) {
+    brands(limit: $limit, sort: "updated_at:desc") {
       id
       name
       remark

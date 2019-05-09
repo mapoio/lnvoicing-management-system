@@ -71,7 +71,7 @@ export class GetPurchases extends GraphQLHttp<GetPurchasesData, GetPurchasesPara
   };
   public query = gql`
     query get($limit: Int) {
-      purchases(limit: $limit) {
+      purchases(limit: $limit, sort: "updated_at:desc") {
         ${purchaseGraphQLString}
       }
     }
