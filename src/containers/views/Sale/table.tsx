@@ -1,44 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, message, Tooltip, Input, Row, Col, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { ResaleStore } from '@store/resale';
-import { Resale, resaleStatus } from '@services/gql/resale';
+import { SaleStore } from '@store/sale';
+import { Sale, saleStatus } from '@services/gql/sale';
 import * as styles from '@shared/style/index.scss';
 import { formatTime } from '@utils/index';
 import { hashHistory } from '@store/router';
 
-const { useStore, dispatch } = ResaleStore;
+const { useStore, dispatch } = SaleStore;
 
 interface IOptionColProps {
-  record: Resale;
+  record: Sale;
 }
 
 const OptionCol = (props: IOptionColProps) => {
   const record = props.record;
   const [activeLoading, setActiveLoading] = useState(false);
   const onView = () => {
-    hashHistory.push(`/resale?batch=${record.id}`);
+    hashHistory.push(`/sale?batch=${record.id}`);
   };
   const onChangeActive = async () => {
-    const resaleitems = record.resaleitems.map(item => item.id);
+    const saleitems = record.saleitems.map(item => item.id);
     const newData: any = { ...record };
-    newData.resaleitems = resaleitems;
+    newData.saleitems = saleitems;
     newData.customer = record.customer.id;
-    newData.status = resaleStatus.INVAILD;
+    newData.status = saleStatus.INVAILD;
     setActiveLoading(true);
     try {
       await dispatch('update', newData);
-      message.success('停用退货单成功');
+      message.success('停用销售单成功');
     } catch (e) {
-      message.error('停用退货单失败！');
+      message.error('停用销售单失败！');
     } finally {
       setActiveLoading(false);
     }
   };
   return (
     <>
-      {record.status === resaleStatus.BUILDED || record.status === resaleStatus.CONFIRM ? (
-        <Tooltip title={'停用本退货单'}>
+      {record.status === saleStatus.BUILDED || record.status === saleStatus.CONFIRM ? (
+        <Tooltip title={'停用本销售单'}>
           <Button icon={'stop'} type="default" shape="circle" loading={activeLoading} onClick={onChangeActive} />
         </Tooltip>
       ) : null}
@@ -49,7 +49,7 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Resale>> = [
+const columns: Array<ColumnProps<Sale>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
@@ -87,22 +87,22 @@ const columns: Array<ColumnProps<Resale>> = [
   {
     title: '状态',
     dataIndex: 'status',
-    render: (status: resaleStatus) => {
+    render: (status: saleStatus) => {
       const statusText =
         {
-          [resaleStatus.BUILDED]: {
+          [saleStatus.BUILDED]: {
             color: '#108ee9',
             text: '已建立'
           },
-          [resaleStatus.CONFIRM]: {
+          [saleStatus.CONFIRM]: {
             color: '#108ee9',
             text: '已确认'
           },
-          [resaleStatus.STOCKIN]: {
+          [saleStatus.STOCKOUT]: {
             color: 'green',
-            text: '已入库'
+            text: '已出库'
           },
-          [resaleStatus.INVAILD]: {
+          [saleStatus.INVAILD]: {
             color: '#f50',
             text: '无效'
           }
@@ -125,13 +125,13 @@ export const Tables = () => {
   const [search, setSearch] = useState('');
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const onShowCreate = () => {
-    hashHistory.push(`/resale?batch`);
+    hashHistory.push(`/sale?batch`);
   };
   const getData = async (num: number = 5) => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取退货单数据成功');
+      message.success('获取销售单数据成功');
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -157,7 +157,7 @@ export const Tables = () => {
           刷新
         </Button>
       </Row>
-      <Table<Resale>
+      <Table<Sale>
         columns={columns}
         dataSource={list.filter(item => item.batch.includes(search))}
         rowKey={r => `${r.id}`}

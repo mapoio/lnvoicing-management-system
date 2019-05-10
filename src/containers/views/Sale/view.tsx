@@ -1,59 +1,59 @@
 import React, { useEffect } from 'react';
 import * as styles from '@shared/style/index.scss';
-import { PurchaseStore } from '@store/purchase';
+import { SaleStore } from '@store/sale';
 import { Row, Col, Divider, Table } from 'antd';
-import { Purchase, purchaseStatus } from '@services/gql/purchase';
+import { Sale, saleStatus } from '@services/gql/sale';
 import { formatTime, searchItem } from '@utils/index';
-import { Supplier } from '@services/gql/supplier';
-import { Purchaseitem } from '@services/gql/purchaseitem';
+import { Customer } from '@services/gql/customer';
+import { Saleitem } from '@services/gql/saleitem';
 import { ColumnProps } from 'antd/lib/table';
 
 const statusOption = {
-  [purchaseStatus.BUILDED]: '已建立',
-  [purchaseStatus.CONFIRM]: '已确认',
-  [purchaseStatus.INVAILD]: '无效',
-  [purchaseStatus.STOCKIN]: '已入库'
+  [saleStatus.BUILDED]: '已建立',
+  [saleStatus.CONFIRM]: '已确认',
+  [saleStatus.INVAILD]: '无效',
+  [saleStatus.STOCKOUT]: '已出库'
 };
 
-interface IPurchaseShow {
-  purchase: Purchase;
+interface ISaleShow {
+  sale: Sale;
 }
 
-const UpdatePurchaseShow = (props: IPurchaseShow) => {
-  const purchase = props.purchase;
+const UpdateSaleShow = (props: ISaleShow) => {
+  const sale = props.sale;
   return (
     <Row gutter={16}>
       <Col span={16}>
         <Row>
           <Col className={styles.headCardItem} span={12}>
-            ID：{purchase.id}
+            ID：{sale.id}
           </Col>
           <Col className={styles.headCardItem} span={12}>
-            备注：{purchase.remark}
+            备注：{sale.remark}
           </Col>
           <Col className={styles.headCardItem} span={12}>
-            更新时间：{formatTime(purchase.updated_at)}
+            更新时间：{formatTime(sale.updated_at)}
           </Col>
           <Col className={styles.headCardItem} span={12}>
-            创建时间：{formatTime(purchase.created_at)}
+            创建时间：{formatTime(sale.created_at)}
           </Col>
         </Row>
       </Col>
       <Col className={`${styles.headCardItem} ${styles.end}`} span={6} offset={2}>
         <div className={styles.rightCard}>
           <p>状态</p>
-          <h2>{statusOption[purchase.status]}</h2>
+          <h2>{statusOption[sale.status]}</h2>
         </div>
         <div className={styles.rightCard}>
           <p>金额</p>
-          <h2>￥{purchase.money}</h2>
+          <h2>￥{sale.money}</h2>
         </div>
       </Col>
     </Row>
   );
 };
 
-const columns: Array<ColumnProps<Purchaseitem>> = [
+const columns: Array<ColumnProps<Saleitem>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
@@ -110,52 +110,52 @@ const columns: Array<ColumnProps<Purchaseitem>> = [
   }
 ];
 
-interface IPurchaseitemShow {
-  purchaseitems: Purchaseitem[];
+interface ISaleitemShow {
+  saleitems: Saleitem[];
 }
-export const Tables = (props: IPurchaseitemShow) => {
-  const list = props.purchaseitems;
+export const Tables = (props: ISaleitemShow) => {
+  const list = props.saleitems;
   return (
     <div className={styles.contentCard}>
-      <h3 className={styles.titleCard}>采购项</h3>
-      <Table<Purchaseitem> dataSource={list} columns={columns} rowKey={r => `${r.id}`} pagination={false} />
+      <h3 className={styles.titleCard}>销售项</h3>
+      <Table<Saleitem> dataSource={list} columns={columns} rowKey={r => `${r.id}`} pagination={false} />
     </div>
   );
 };
 
-interface ISupplierShow {
-  supplier: Supplier;
+interface ICustomerShow {
+  customer: Customer;
 }
 
-const SupplierShow = (props: ISupplierShow) => {
-  const supplier = props.supplier;
+const CustomerShow = (props: ICustomerShow) => {
+  const customer = props.customer;
   return (
     <div className={styles.contentCard}>
-      <h3 className={styles.titleCard}>供应商</h3>
+      <h3 className={styles.titleCard}>客户</h3>
       <Row gutter={16}>
         <Col className={styles.itemCard} span={8}>
-          ID：{supplier.id}
+          ID：{customer.id}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          名称：{supplier.name}
+          名称：{customer.name}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          地址：{supplier.address}
+          地址：{customer.address}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          电话：{supplier.phone}
+          电话：{customer.phone}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          联系人姓名：{supplier.manageName}
+          联系人姓名：{customer.manageName}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          联系人电话：{supplier.managePhone}
+          联系人电话：{customer.managePhone}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          更新时间：{formatTime(supplier.updated_at)}
+          更新时间：{formatTime(customer.updated_at)}
         </Col>
         <Col className={styles.itemCard} span={8}>
-          创建时间：{formatTime(supplier.created_at)}
+          创建时间：{formatTime(customer.created_at)}
         </Col>
       </Row>
     </div>
@@ -167,31 +167,31 @@ interface IView {
 }
 
 export const View = (props: IView) => {
-  const purchases = PurchaseStore.useStore(s => s).list;
+  const sales = SaleStore.useStore(s => s).list;
   useEffect(() => {
-    if (purchases.length < 1) {
-      PurchaseStore.dispatch('getList', 500);
+    if (sales.length < 1) {
+      SaleStore.dispatch('getList', 500);
     }
     return () => false;
   }, []);
-  const purchase = searchItem(props.batchId, purchases).data;
-  if (!purchase) {
-    return <h2>不存在此单号采购单</h2>;
+  const sale = searchItem(props.batchId, sales).data;
+  if (!sale) {
+    return <h2>不存在此单号销售单</h2>;
   }
-  const supplier = purchase.supplier;
+  const customer = sale.customer;
   return (
     <>
       <div className={styles.tabHead}>
         <p>
-          耗材进销存管理系统 / <a href="#/purchase">销售管理</a>
+          耗材进销存管理系统 / <a href="#/sale">销售管理</a>
         </p>
-        <h2>{purchase.batch}</h2>
-        <UpdatePurchaseShow purchase={purchase} />
+        <h2>{sale.batch}</h2>
+        <UpdateSaleShow sale={sale} />
       </div>
       <div className={styles.tab}>
-        <SupplierShow supplier={supplier} />
+        <CustomerShow customer={customer} />
         <Divider className={styles.cardDivider} />
-        <Tables purchaseitems={purchase.purchaseitems} />
+        <Tables saleitems={sale.saleitems} />
       </div>
     </>
   );

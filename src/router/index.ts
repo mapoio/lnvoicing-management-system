@@ -100,6 +100,14 @@ export const menu: IMenu[] = [
     icon: 'fall',
     component: 'Resale',
     exact: true
+  },
+  {
+    id: 9,
+    path: '/sale',
+    title: '销售管理',
+    icon: 'barcode',
+    component: 'Sale',
+    exact: true
   }
 ];
 

@@ -76,12 +76,12 @@ const columns: Array<ColumnProps<Purchase>> = [
   },
   {
     title: '更新时间',
-    dataIndex: 'created_at',
+    dataIndex: 'updated_at',
     render: formatTime
   },
   {
     title: '创建时间',
-    dataIndex: 'updated_at',
+    dataIndex: 'created_at',
     render: formatTime
   },
   {
