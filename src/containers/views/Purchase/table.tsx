@@ -49,7 +49,7 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-const columns: Array<ColumnProps<Purchase>> = [
+export const columns: Array<ColumnProps<Purchase>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'

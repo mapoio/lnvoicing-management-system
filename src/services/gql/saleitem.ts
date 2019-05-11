@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { GraphQLHttp } from '@utils/http';
 import { GraphQLData, BaseModel } from '@utils/index';
 import { Good, goodGraphQLString } from './good';
+import { stockCoreGraphQLString, Stock } from './stock';
 
 export enum saleitemStatus {
   ACTIVE = 'ACTIVE',
@@ -13,6 +14,7 @@ export interface Saleitem extends BaseModel {
   amount: number;
   status: saleitemStatus;
   good: Good;
+  stocks: Stock[];
 }
 
 export interface ICreateSaleitem {
@@ -52,6 +54,13 @@ export const saleitemGraphQLString = `
 ${saleitemCoreGraphQLString}
 good {
   ${goodGraphQLString}
+}
+stocks {
+  id
+  goodsCode
+  status
+  created_at
+  updated_at
 }
 `;
 

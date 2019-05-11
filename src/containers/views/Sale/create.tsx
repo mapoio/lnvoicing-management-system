@@ -9,6 +9,7 @@ import { ColumnProps } from 'antd/lib/table';
 import { CustomerSelect } from '@views/Customer/service';
 import { GoodSelect } from '@views/Good/service';
 import { hashHistory } from '@store/router';
+import { Stock } from '@services/gql/stock';
 
 const { TextArea } = Input;
 
@@ -52,6 +53,11 @@ const columns: Array<ColumnProps<Saleitem>> = [
   {
     title: '数量',
     dataIndex: 'amount'
+  },
+  {
+    title: '库存数量',
+    dataIndex: 'good.stocks',
+    render: (stocks: Stock[]) => stocks.length
   }
 ];
 

@@ -3,6 +3,7 @@ import { GraphQLHttp } from '@utils/http';
 import { GraphQLData, BaseModel } from '@utils/index';
 import { Brand, brandGraphQLString } from './brand';
 import { Model, modelGraphQLString } from './model';
+import { Stock } from './stock';
 
 export enum goodStatus {
   ACTIVE = 'ACTIVE',
@@ -18,9 +19,10 @@ export interface Good extends BaseModel {
   status: goodStatus;
   brand: Brand;
   model: Model;
+  stocks: Stock[];
 }
 
-export type GoodCoreData = Pick<Good, Exclude<keyof Good, 'id' | 'created_at' | 'updated_at'>>;
+export type GoodCoreData = Pick<Good, Exclude<keyof Good, 'id' | 'created_at' | 'updated_at' | 'stocks'>>;
 
 export interface OneGood {
   good?: Good;
@@ -55,6 +57,13 @@ brand {
 }
 model {
   ${modelGraphQLString}
+}
+stocks {
+  id
+  goodsCode
+  status
+  created_at
+  updated_at
 }
 `;
 

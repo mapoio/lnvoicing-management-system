@@ -22,7 +22,9 @@ export const asynchronousComponents = {
   Repertory: loadComponent(() => import(/* webpackChunkName: "Repertory" */ '@views/Repertory')),
   Purchase: loadComponent(() => import(/* webpackChunkName: "Purchase" */ '@views/Purchase')),
   Resale: loadComponent(() => import(/* webpackChunkName: "Resale" */ '@views/Resale')),
-  Sale: loadComponent(() => import(/* webpackChunkName: "Sale" */ '@views/Sale'))
+  Sale: loadComponent(() => import(/* webpackChunkName: "Sale" */ '@views/Sale')),
+  Stockin: loadComponent(() => import(/* webpackChunkName: "Stockin" */ '@views/Stockin')),
+  Stock: loadComponent(() => import(/* webpackChunkName: "Stock" */ '@views/Stock'))
 };
 
 export type AsynchronousComponentKeys = keyof typeof asynchronousComponents;

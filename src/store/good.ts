@@ -57,7 +57,7 @@ const { useStore, dispatch } = createStore({
       dispatch('createOne', res.data.createGoods.good);
     },
     async update(item: Good) {
-      const { id, created_at, updated_at, ...data } = item;
+      const { id, created_at, updated_at, stocks, ...data } = item;
       const res = handleGraphQLError(await UPDATE.send({ data, id }));
       dispatch('updateOne', res.data.updateGoods.good);
     }

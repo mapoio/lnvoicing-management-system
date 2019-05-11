@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, Form } from 'antd';
+import { Button, Modal, Form, message } from 'antd';
 import { GoodStore } from '@store/good';
 import { useCreateOrUpdateState } from '@components/UseStates';
 import { GoodCoreData } from '@services/gql/good';
@@ -24,8 +24,12 @@ export const CreateModal = (props: ICreateGood) => {
   };
   const onOK = async () => {
     setLoading(true);
-    await dispatch('create', Object.assign({}, data, { model: data.model.id, brand: data.brand.id }));
-    setData(initData);
+    try {
+      await dispatch('create', Object.assign({}, data, { model: data.model.id, brand: data.brand.id }));
+      setData(initData);
+    } catch (error) {
+      message.error(error.message);
+    }
     props.onShow(false);
     setLoading(false);
   };

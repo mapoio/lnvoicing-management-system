@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Form, Select } from 'antd';
+import { Input, Form, Select, InputNumber } from 'antd';
 import { goodStatus, Good } from '@services/gql/good';
 import { Brand } from '@services/gql/brand';
 import { BrandStore } from '@store/brand';
@@ -94,35 +94,35 @@ export const CreateOrUpdateForm = (props: IFormProps) => {
         <Input
           placeholder="输入规格"
           value={data.specification}
-          onChange={e => setData(Object.assign({}, data, { name: e.target.value }))}
+          onChange={e => setData(Object.assign({}, data, { specification: e.target.value }))}
         />
       </FormItem>
       <FormItem label="花纹" required>
         <Input
           placeholder="输入花纹"
           value={data.pattern}
-          onChange={e => setData(Object.assign({}, data, { phone: e.target.value }))}
+          onChange={e => setData(Object.assign({}, data, { pattern: e.target.value }))}
         />
       </FormItem>
       <FormItem label="载重指数" required>
-        <Input
+        <InputNumber
           placeholder="输入载重指数"
           value={data.loadIndex}
-          onChange={e => setData(Object.assign({}, data, { address: e.target.value }))}
+          onChange={e => setData(Object.assign({}, data, { loadIndex: e }))}
         />
       </FormItem>
       <FormItem label="速度级别" required>
         <Input
           placeholder="输入速度级别"
           value={data.speedLevel}
-          onChange={e => setData(Object.assign({}, data, { manageName: e.target.value }))}
+          onChange={e => setData(Object.assign({}, data, { speedLevel: e.target.value }))}
         />
       </FormItem>
       <FormItem label="单位" required>
         <Input
           placeholder="输入单位"
           value={data.unit}
-          onChange={e => setData(Object.assign({}, data, { managePhone: e.target.value }))}
+          onChange={e => setData(Object.assign({}, data, { unit: e.target.value }))}
         />
       </FormItem>
       <FormItem label="类型" required>

@@ -3,8 +3,9 @@ import { GraphQLHttp } from '@utils/http';
 import { GraphQLData, BaseModel } from '@utils/index';
 import { Good, goodGraphQLString } from './good';
 import { Repertory, repertoryGraphQLString } from './repertory';
-import { Purchaseitem } from './purchaseitem';
-import { purchaseGraphQLString } from './purchase';
+import { Purchaseitem, purchaseitemCoreGraphQLString } from './purchaseitem';
+import { Saleitem, saleitemCoreGraphQLString } from './saleitem';
+import { Resaleitem, resaleitemCoreGraphQLString } from './resaleitem';
 
 export enum stockStatus {
   STOCKIN = 'STOCKIN',
@@ -18,6 +19,18 @@ export interface Stock extends BaseModel {
   goods: Good;
   repertory: Repertory;
   purchaseitem: Purchaseitem;
+  resaleitem: Resaleitem;
+  saleitem: Saleitem;
+}
+
+export interface ICreateStock {
+  goodsCode: string;
+  status: stockStatus;
+  goods: string;
+  repertory: string;
+  purchaseitem: string;
+  resaleitem: string;
+  saleitem: string;
 }
 
 export type StockCoreData = Pick<Stock, Exclude<keyof Stock, 'id' | 'created_at' | 'updated_at'>>;
@@ -53,7 +66,13 @@ repertory {
   ${repertoryGraphQLString}
 }
 purchaseitem {
-  ${purchaseGraphQLString}
+  ${purchaseitemCoreGraphQLString}
+}
+saleitem {
+  ${saleitemCoreGraphQLString}
+}
+resaleitem {
+  ${resaleitemCoreGraphQLString}
 }
 `;
 
@@ -126,7 +145,7 @@ export type createStockData = GraphQLData<TCreateStockData>;
 export type CreateStockParamsData = StockCoreData;
 
 interface ICreateStockParams {
-  data: CreateStockParamsData;
+  data: ICreateStock;
 }
 
 export class CreateStock extends GraphQLHttp<createStockData, ICreateStockParams> {

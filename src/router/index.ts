@@ -86,6 +86,24 @@ export const menu: IMenu[] = [
     exact: true
   },
   {
+    id: 62,
+    pid: 6,
+    path: '/repertory/stockin',
+    title: '入库管理',
+    icon: 'database',
+    component: 'Stockin',
+    exact: true
+  },
+  {
+    id: 63,
+    pid: 6,
+    path: '/repertory/stock',
+    title: '库存管理',
+    icon: 'database',
+    component: 'Stock',
+    exact: true
+  },
+  {
     id: 7,
     path: '/purchase',
     title: '采购管理',

@@ -1,47 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, message, Tooltip, Input, Row, Col, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import { ResaleStore } from '@store/resale';
-import { Resale, resaleStatus } from '@services/gql/resale';
+import { StockinStore } from '@store/stockin';
+import { Stockin, stockinStatus } from '@services/gql/stockin';
 import * as styles from '@shared/style/index.scss';
 import { formatTime } from '@utils/index';
 import { hashHistory } from '@store/router';
 
-const { useStore, dispatch } = ResaleStore;
+const { useStore, dispatch } = StockinStore;
 
 interface IOptionColProps {
-  record: Resale;
+  record: Stockin;
 }
 
 const OptionCol = (props: IOptionColProps) => {
   const record = props.record;
-  const [activeLoading, setActiveLoading] = useState(false);
   const onView = () => {
-    hashHistory.push(`/resale?batch=${record.id}`);
-  };
-  const onChangeActive = async () => {
-    const resaleitems = record.resaleitems.map(item => item.id);
-    const newData: any = { ...record };
-    newData.resaleitems = resaleitems;
-    newData.customer = record.customer.id;
-    newData.status = resaleStatus.INVAILD;
-    setActiveLoading(true);
-    try {
-      await dispatch('update', newData);
-      message.success('停用退货单成功');
-    } catch (e) {
-      message.error('停用退货单失败！');
-    } finally {
-      setActiveLoading(false);
-    }
+    hashHistory.push(`/repertory/stockin?batch=${record.id}`);
   };
   return (
     <>
-      {record.status === resaleStatus.BUILDED || record.status === resaleStatus.CONFIRM ? (
-        <Tooltip title={'停用本退货单'}>
-          <Button icon={'stop'} type="default" shape="circle" loading={activeLoading} onClick={onChangeActive} />
-        </Tooltip>
-      ) : null}
       <Tooltip title="查看详情">
         <Button icon="eye" type="default" shape="circle" onClick={onView} />
       </Tooltip>
@@ -49,7 +27,7 @@ const OptionCol = (props: IOptionColProps) => {
   );
 };
 
-export const columns: Array<ColumnProps<Resale>> = [
+const columns: Array<ColumnProps<Stockin>> = [
   {
     title: '唯一ID',
     dataIndex: 'id'
@@ -59,16 +37,12 @@ export const columns: Array<ColumnProps<Resale>> = [
     dataIndex: 'batch'
   },
   {
-    title: '金额',
-    dataIndex: 'money'
+    title: '入库仓库',
+    dataIndex: 'repertory.name'
   },
   {
-    title: '客户名称',
-    dataIndex: 'customer.name'
-  },
-  {
-    title: '客户电话',
-    dataIndex: 'customer.phone'
+    title: '仓库地址',
+    dataIndex: 'repertory.address'
   },
   {
     title: '备注',
@@ -87,28 +61,20 @@ export const columns: Array<ColumnProps<Resale>> = [
   {
     title: '状态',
     dataIndex: 'status',
-    render: (status: resaleStatus) => {
+    render: (status: stockinStatus) => {
       const statusText =
         {
-          [resaleStatus.BUILDED]: {
-            color: '#108ee9',
-            text: '已建立'
-          },
-          [resaleStatus.CONFIRM]: {
-            color: '#108ee9',
-            text: '已确认'
-          },
-          [resaleStatus.STOCKIN]: {
+          [stockinStatus.ACTIVE]: {
             color: 'green',
-            text: '已入库'
+            text: '有效'
           },
-          [resaleStatus.INVAILD]: {
+          [stockinStatus.INACTIVE]: {
             color: '#f50',
             text: '无效'
           }
         }[status] || {};
       const color = statusText.color;
-      return <Badge color={color} status="processing" text={statusText.text} />;
+      return <Badge color={color} text={statusText.text} />;
     }
   },
   {
@@ -125,13 +91,13 @@ export const Tables = () => {
   const [search, setSearch] = useState('');
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value);
   const onShowCreate = () => {
-    hashHistory.push(`/resale?batch`);
+    hashHistory.push(`/repertory/stockin?batch`);
   };
   const getData = async (num: number = 5) => {
     setLoding(true);
     try {
       await dispatch('getList', num);
-      message.success('获取退货单数据成功');
+      message.success('获取入库单数据成功');
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -157,7 +123,7 @@ export const Tables = () => {
           刷新
         </Button>
       </Row>
-      <Table<Resale>
+      <Table<Stockin>
         columns={columns}
         dataSource={list.filter(item => item.batch.includes(search))}
         rowKey={r => `${r.id}`}
