@@ -5,6 +5,7 @@ import { useCreateOrUpdateState } from '@components/UseStates';
 import { EmployeeCoreData } from '@services/gql/employee';
 import { CreateOrUpdateForm } from './form';
 import { formItemLayout } from '@constants/index';
+import { cloneDeep } from 'lodash';
 
 const { dispatch } = EmployeeStore;
 
@@ -25,7 +26,12 @@ export const CreateModal = (props: ICreateEmployee) => {
   };
   const onOK = async () => {
     setLoading(true);
-    await dispatch('create', data);
+    const newData = cloneDeep(data);
+    newData.user.provider = 'local';
+    newData.user.confirmed = true;
+    newData.user.blocked = false;
+    newData.user.role = '1';
+    await dispatch('create', newData);
     setData(initData);
     props.onShow(false);
     setLoading(false);

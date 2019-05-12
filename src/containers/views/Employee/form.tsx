@@ -78,36 +78,39 @@ export const CreateOrUpdateForm = (props: IFormProps) => {
           onChange={e => setData(Object.assign({}, data, { phone: e.target.value }))}
         />
       </FormItem>
-      {/* <FormItem label="员工地址" required>
+      <FormItem label="员工职位" required>
         <Input
-          placeholder="输入员工地址"
-          value={data.address}
-          onChange={e => setData(Object.assign({}, data, { address: e.target.value }))}
+          placeholder="输入员工职位"
+          value={data.position}
+          onChange={e => setData(Object.assign({}, data, { position: e.target.value }))}
         />
       </FormItem>
-      <FormItem label="负责人姓名" required>
+      <FormItem label="电子邮件" required>
         <Input
-          placeholder="输入负责人姓名"
-          value={data.manageName}
-          onChange={e => setData(Object.assign({}, data, { manageName: e.target.value }))}
+          placeholder="输入电子邮件"
+          value={data.user && data.user.email}
+          onChange={e => setData(Object.assign({}, data, { user: { ...data.user, email: e.target.value } }))}
         />
       </FormItem>
-      <FormItem label="负责人电话" required>
+      <FormItem label="登录名" required>
         <Input
-          placeholder="输入负责人电话"
-          value={data.managePhone}
-          onChange={e => setData(Object.assign({}, data, { managePhone: e.target.value }))}
+          placeholder="输入登录名"
+          value={data.user && data.user.username}
+          onChange={e => setData(Object.assign({}, data, { user: { ...data.user, username: e.target.value } }))}
         />
-      </FormItem> */}
+      </FormItem>
+      <FormItem label="登录密码" required>
+        <Input
+          placeholder="输入新登录密码"
+          value={data.user && data.user.password}
+          onChange={e => setData(Object.assign({}, data, { user: { ...data.user, password: e.target.value } }))}
+        />
+      </FormItem>
       <FormItem label="员工类型" required>
         <TypeSelect type={data.type} setType={type => setData(Object.assign({}, data, { type }))} />
       </FormItem>
       <FormItem label="员工权限" required>
-        <RoleSelect
-          disabled={!!data.id}
-          role={data.role}
-          setRole={role => setData(Object.assign({}, data, { role }))}
-        />
+        <RoleSelect role={data.role} setRole={role => setData(Object.assign({}, data, { role }))} />
       </FormItem>
     </>
   );

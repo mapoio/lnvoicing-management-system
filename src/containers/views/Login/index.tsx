@@ -26,8 +26,9 @@ const Login = (form: WrappedFormUtils) => {
     <div className={styles.login}>
       <Form onSubmit={submit} className={styles.form}>
         <div className={styles.logoBox}>
-          <Icon type="ant-design" />
+          <Icon type="deployment-unit" />
         </div>
+        <h3 style={{ textAlign: 'center' }}>耗材商品管理系统</h3>
         <FormItem hasFeedback>
           <Input
             prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -46,12 +47,8 @@ const Login = (form: WrappedFormUtils) => {
           />
         </FormItem>
         <FormItem>
-          <div className={styles.tips}>
-            <span>username: admin</span>
-            <span>password: admin</span>
-          </div>
           <Button type="primary" htmlType="submit" block loading={loadding}>
-            login
+            登录
           </Button>
         </FormItem>
       </Form>

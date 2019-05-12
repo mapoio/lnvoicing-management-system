@@ -2,8 +2,9 @@ import * as React from 'react';
 import { Layout, Icon } from 'antd';
 
 import * as styles from './index.scss';
-import { AuthStore } from '@store/auth';
 import { GlobalStore } from '@store/global';
+import { hashHistory } from '@store/router';
+import { LOCALSTORAGE_KEYS } from '@constants/index';
 
 const useGlobalStore = GlobalStore.useStore;
 
@@ -21,7 +22,11 @@ const Header = () => {
           className={styles.rightIcon}
           type="logout"
           theme="outlined"
-          onClick={() => AuthStore.dispatch('logout')}
+          onClick={() => {
+            localStorage.removeItem(LOCALSTORAGE_KEYS.AUTH);
+            localStorage.removeItem(LOCALSTORAGE_KEYS.JWT);
+            hashHistory.replace('/login');
+          }}
         />
       </div>
     </Layout.Header>

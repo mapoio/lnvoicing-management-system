@@ -1,13 +1,13 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { DocumentNode } from 'graphql';
 
+export const HOST = 'http://localhost:1337';
+
 const Axios = axios.create({
-  baseURL: 'http://localhost:1337',
+  baseURL: HOST,
   timeout: 10000,
   headers: {
-    Authorization:
-      // tslint:disable-next-line: max-line-length
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTU3MDI4NTYyLCJleHAiOjE1NTk2MjA1NjJ9.BUbT1tMt1k_0z1fNaVPj3KjlMebkNOgfxfMznujN9_g'
+    Authorization: ''
   }
 });
 

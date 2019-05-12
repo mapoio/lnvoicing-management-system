@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import { GraphQLHttp } from '@utils/http';
-import { GraphQLData, BaseModel } from '@utils/index';
+import { GraphQLData } from '@utils/index';
+import { Employee } from './employee';
 
 export enum UserRole {
   STOCK = 'STOCK',
@@ -18,6 +19,7 @@ export enum userType {
 }
 
 export interface User {
+  employee: string | Employee;
   id: string;
   username: string;
   email: string;
@@ -25,6 +27,7 @@ export interface User {
   confirmed: boolean;
   blocked: boolean;
   role: string;
+  password?: string;
 }
 
 export type UserCoreData = User;

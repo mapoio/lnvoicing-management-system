@@ -5,6 +5,7 @@ import { formItemLayout } from '@constants/index';
 import { Employee } from '@services/gql/employee';
 import { useCreateOrUpdateState } from '@components/UseStates';
 import { CreateOrUpdateForm } from './form';
+import { cloneDeep } from 'lodash';
 
 const FormItem = Form.Item;
 const { dispatch } = EmployeeStore;
@@ -23,7 +24,8 @@ export const UpdateModal = (props: IUpdateEmployee) => {
   };
   const onOK = async () => {
     setLoading(true);
-    await dispatch('update', data);
+    const newData = cloneDeep(data);
+    await dispatch('update', newData);
     message.success('修改员工成功');
     setData(data);
     props.onShow(false);

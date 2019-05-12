@@ -7,21 +7,37 @@ import menu, { IMenu, IMenuInTree } from './../menu';
 import { arrayToTree, queryArray } from '@utils/index';
 import { hashHistory } from '@store/router';
 import { GlobalStore } from '@store/global';
+import { AuthStore } from '@store/auth';
+import { Employee, EmployeeRole } from '@services/gql/employee';
 
 const { SubMenu } = Menu;
 const useGlobalStore = GlobalStore.useStore;
 
 const useMenuState = () => {
   const { sideBarTheme, sideBarCollapsed, navOpenKeys } = useGlobalStore(s => s);
+  const user = AuthStore.useStore(s => s.auth.user.employee) as Employee;
   return {
     sideBarTheme,
     sideBarCollapsed,
-    navOpenKeys
+    navOpenKeys,
+    user
   };
 };
 
+const checkRole = (needRole: EmployeeRole, currlyRole: EmployeeRole) => {
+  if (!needRole) {
+    return true;
+  } else if (currlyRole === EmployeeRole.ADMIN) {
+    return true;
+  } else if (currlyRole === needRole) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 const SiderMenu = () => {
-  const { sideBarTheme, sideBarCollapsed, navOpenKeys } = useMenuState();
+  const { sideBarTheme, sideBarCollapsed, navOpenKeys, user } = useMenuState();
 
   // 打开的菜单层级记录
   const levelMap: NumberObject = {};
@@ -92,6 +108,9 @@ const SiderMenu = () => {
   // 递归生成菜单
   const getMenus = (menuTrees: IMenuInTree[]) => {
     return menuTrees.map(item => {
+      if (!checkRole(item.role, user.role)) {
+        return null;
+      }
       if (item.children) {
         if (item.pid) {
           levelMap[item.id] = item.pid;
