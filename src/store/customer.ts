@@ -47,7 +47,7 @@ const { useStore, dispatch } = createStore({
       }
     },
     createOne(state, payload: Customer) {
-      state.list.push(payload);
+      state.list = state.list.concat([payload]);
     }
   },
   effects: {

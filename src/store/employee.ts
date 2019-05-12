@@ -50,7 +50,7 @@ const { useStore, dispatch } = createStore({
       }
     },
     createOne(state, payload: Employee) {
-      state.list.push(payload);
+      state.list = state.list.concat([payload]);
     }
   },
   effects: {

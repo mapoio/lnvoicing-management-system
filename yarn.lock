@@ -10553,10 +10553,10 @@ react-slick@~0.23.2:
     prettier "^1.14.3"
     resize-observer-polyfill "^1.5.0"
 
-react-state-manage@1.11.0:
-  version "1.11.0"
-  resolved "https://registry.npm.taobao.org/react-state-manage/download/react-state-manage-1.11.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-state-manage%2Fdownload%2Freact-state-manage-1.11.0.tgz#ac02b28891e541b1a00e0f3bd62e6b873a0da8f5"
-  integrity sha1-rAKyiJHlQbGgDg871i5rhzoNqPU=
+react-state-manage@1.11.1:
+  version "1.11.1"
+  resolved "https://registry.npm.taobao.org/react-state-manage/download/react-state-manage-1.11.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-state-manage%2Fdownload%2Freact-state-manage-1.11.1.tgz#0a3d3c28f4d659459174b37c6e7d81b4d90876b9"
+  integrity sha1-Cj08KPTWWUWRdLN8bn2BtNkIdrk=
   dependencies:
     clone-deep "^4.0.1"
     fast-deep-equal "^2.0.1"

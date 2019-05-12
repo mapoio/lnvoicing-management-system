@@ -51,7 +51,7 @@
     "react-i18next": "^10.8.1",
     "react-loadable": "^5.5.0",
     "react-router-dom": "^5.0.0",
-    "react-state-manage": "1.11.0",
+    "react-state-manage": "1.11.1",
     "react-use": "^8.1.2",
     "stamen": "^1.9.0",
     "uuid": "^3.3.2"
