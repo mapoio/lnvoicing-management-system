@@ -25,7 +25,7 @@ const Sider = () => {
   return (
     <Layout.Sider className={styles.sider} trigger={null} theme={sideBarTheme} collapsible collapsed={sideBarCollapsed}>
       <div className={classnames(styles.logoBox, sideBarTheme === 'dark' && styles.dark)}>
-        <Icon type="ant-design" />
+        <Icon type="deployment-unit" />
       </div>
       <SiderMenu />
       {!sideBarCollapsed && ChangeTheme}

@@ -1,4 +1,5 @@
 import { AsynchronousComponentKeys } from './asyncComponets';
+import { EmployeeRole } from '@services/gql/employee';
 
 export interface IMenu {
   title: string;
@@ -8,6 +9,7 @@ export interface IMenu {
   icon?: string;
   component?: AsynchronousComponentKeys;
   exact?: boolean;
+  role?: EmployeeRole;
 }
 
 export interface IMenuInTree extends IMenu {
@@ -17,10 +19,11 @@ export interface IMenuInTree extends IMenu {
 export const menu: IMenu[] = [
   {
     id: 1,
-    path: '/',
+    path: '/Employee',
     title: '用户管理',
     icon: 'dashboard',
-    component: 'Dashboard',
+    component: 'Employee',
+    role: EmployeeRole.USER,
     exact: true
   },
   {
@@ -32,7 +35,7 @@ export const menu: IMenu[] = [
     pid: 3,
     id: 31,
     title: '商品管理',
-    path: '/goods/goods',
+    path: '/',
     icon: 'shopping-cart',
     component: 'Good',
     exact: true
@@ -57,6 +60,13 @@ export const menu: IMenu[] = [
   },
   {
     id: 4,
+    title: '销售管理',
+    icon: 'barcode',
+    role: EmployeeRole.SALE
+  },
+  {
+    id: 41,
+    pid: 4,
     path: '/customer',
     title: '客户管理',
     icon: 'user',
@@ -64,7 +74,47 @@ export const menu: IMenu[] = [
     exact: true
   },
   {
+    id: 42,
+    pid: 4,
+    path: '/sale',
+    title: '销售管理',
+    icon: 'barcode',
+    component: 'Sale',
+    exact: true
+  },
+  {
+    id: 10,
+    title: '售后管理',
+    icon: 'fall',
+    role: EmployeeRole.RESALE
+  },
+  {
+    id: 101,
+    pid: 10,
+    path: '/resalecustomer',
+    title: '客户管理',
+    icon: 'user',
+    component: 'Customer',
+    exact: true
+  },
+  {
+    id: 102,
+    pid: 10,
+    path: '/resale',
+    title: '退货管理',
+    icon: 'fall',
+    component: 'Resale',
+    exact: true
+  },
+  {
     id: 5,
+    title: '采购管理',
+    icon: 'shop',
+    role: EmployeeRole.PURCHASE
+  },
+  {
+    id: 51,
+    pid: 5,
     path: '/supplier',
     title: '供应商管理',
     icon: 'shop',
@@ -72,9 +122,19 @@ export const menu: IMenu[] = [
     exact: true
   },
   {
+    id: 52,
+    pid: 5,
+    path: '/purchase',
+    title: '采购管理',
+    icon: 'rise',
+    component: 'Purchase',
+    exact: true
+  },
+  {
     id: 6,
     title: '库存管理',
-    icon: 'layout'
+    icon: 'layout',
+    role: EmployeeRole.STOCK
   },
   {
     id: 61,
@@ -95,36 +155,21 @@ export const menu: IMenu[] = [
     exact: true
   },
   {
+    id: 64,
+    pid: 6,
+    path: '/repertory/stockout',
+    title: '出库管理',
+    icon: 'database',
+    component: 'Stockout',
+    exact: true
+  },
+  {
     id: 63,
     pid: 6,
     path: '/repertory/stock',
     title: '库存管理',
     icon: 'database',
     component: 'Stock',
-    exact: true
-  },
-  {
-    id: 7,
-    path: '/purchase',
-    title: '采购管理',
-    icon: 'rise',
-    component: 'Purchase',
-    exact: true
-  },
-  {
-    id: 8,
-    path: '/resale',
-    title: '退货管理',
-    icon: 'fall',
-    component: 'Resale',
-    exact: true
-  },
-  {
-    id: 9,
-    path: '/sale',
-    title: '销售管理',
-    icon: 'barcode',
-    component: 'Sale',
     exact: true
   }
 ];

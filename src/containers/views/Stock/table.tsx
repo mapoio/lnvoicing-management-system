@@ -4,7 +4,7 @@ import { ColumnProps } from 'antd/lib/table';
 import { GoodStore } from '@store/good';
 import { Good, goodStatus } from '@services/gql/good';
 import * as styles from '@shared/style/index.scss';
-import { Stock } from '@services/gql/stock';
+import { Stock, stockStatus } from '@services/gql/stock';
 
 const { useStore, dispatch } = GoodStore;
 
@@ -66,7 +66,7 @@ const columns: Array<ColumnProps<Good>> = [
   {
     title: '库存数量',
     dataIndex: 'stocks',
-    render: (stocks: Stock[]) => stocks.length
+    render: (stocks: Stock[]) => stocks.filter(s => s.status === stockStatus.STOCKIN).length
   }
 ];
 

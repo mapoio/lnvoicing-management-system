@@ -2,7 +2,6 @@ import gql from 'graphql-tag';
 import { GraphQLHttp } from '@utils/http';
 import { GraphQLData, BaseModel } from '@utils/index';
 import { Good, goodGraphQLString } from './good';
-import { stockCoreGraphQLString, Stock } from './stock';
 
 export enum resaleitemStatus {
   ACTIVE = 'ACTIVE',

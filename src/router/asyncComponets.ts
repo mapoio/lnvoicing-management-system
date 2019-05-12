@@ -9,7 +9,7 @@ const loadComponent = (loader: () => Promise<any>) =>
   });
 
 export const asynchronousComponents = {
-  Dashboard: loadComponent(() => import(/* webpackChunkName: "dashboard" */ '@views/Dashboard')),
+  Employee: loadComponent(() => import(/* webpackChunkName: "Employee" */ '@views/Employee')),
   ChartAreaStack: loadComponent(() => import(/* webpackChunkName: "chart-area-stack" */ '@views/Charts/AreaStack')),
   ChartLineSmooth: loadComponent(() => import(/* webpackChunkName: "chart-line-smooth" */ '@views/Charts/LineSmooth')),
   ChartPie: loadComponent(() => import(/* webpackChunkName: "chart-pie" */ '@views/Charts/Pie')),
@@ -24,7 +24,8 @@ export const asynchronousComponents = {
   Resale: loadComponent(() => import(/* webpackChunkName: "Resale" */ '@views/Resale')),
   Sale: loadComponent(() => import(/* webpackChunkName: "Sale" */ '@views/Sale')),
   Stockin: loadComponent(() => import(/* webpackChunkName: "Stockin" */ '@views/Stockin')),
-  Stock: loadComponent(() => import(/* webpackChunkName: "Stock" */ '@views/Stock'))
+  Stock: loadComponent(() => import(/* webpackChunkName: "Stock" */ '@views/Stock')),
+  Stockout: loadComponent(() => import(/* webpackChunkName: "Stockout" */ '@views/Stockout'))
 };
 
 export type AsynchronousComponentKeys = keyof typeof asynchronousComponents;

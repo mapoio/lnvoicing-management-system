@@ -30,7 +30,7 @@ export class DynamicTag extends React.Component<IProps> {
   handleInputConfirm = () => {
     const { inputValue } = this.state;
     const { tags } = this.props;
-    let newTags = [];
+    let newTags = [...tags];
     if (inputValue && tags.indexOf(inputValue) === -1) {
       newTags = [...tags, inputValue];
     }
@@ -69,7 +69,7 @@ export class DynamicTag extends React.Component<IProps> {
             ref={this.saveInputRef}
             type="text"
             size="small"
-            style={{ width: 78 }}
+            style={{ width: 120 }}
             value={inputValue}
             onChange={this.handleInputChange}
             onBlur={this.handleInputConfirm}

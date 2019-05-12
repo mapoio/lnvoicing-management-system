@@ -121,7 +121,7 @@ export type UpdateStockParamsData = StockCoreData;
 
 interface IUpdateStockParams {
   id: string;
-  data: UpdateStockParamsData;
+  data: Pick<ICreateStock, Exclude<keyof ICreateStock, 'goodsCode'>>;
 }
 
 export class UpdateStock extends GraphQLHttp<UpdateStockData, IUpdateStockParams> {
