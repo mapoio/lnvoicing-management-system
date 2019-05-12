@@ -10,9 +10,8 @@ import {
 } from '@services/gql/stockin';
 import { handleGraphQLError } from '@utils/index';
 import dayjs from 'dayjs';
-import { flattenDepth } from 'lodash';
 import { CreateStock, ICreateStock, stockStatus } from '@services/gql/stock';
-import { UpdatePurchase, purchaseStatus } from '@services/gql/purchase';
+import { purchaseStatus } from '@services/gql/purchase';
 import { PurchaseStore } from './purchase';
 import { ResaleStore } from './resale';
 import { resaleStatus } from '@services/gql/resale';

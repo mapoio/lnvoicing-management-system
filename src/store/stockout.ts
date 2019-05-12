@@ -10,7 +10,7 @@ import {
 } from '@services/gql/stockout';
 import { handleGraphQLError } from '@utils/index';
 import dayjs from 'dayjs';
-import { CreateStock, ICreateStock, stockStatus, UpdateStock } from '@services/gql/stock';
+import { ICreateStock, stockStatus, UpdateStock } from '@services/gql/stock';
 import { SaleStore } from './sale';
 import { saleStatus } from '@services/gql/sale';
 

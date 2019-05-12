@@ -61,6 +61,7 @@ const SiderMenu = () => {
     if (latestCloseKey) {
       nextOpenKeys = getAncestorKeys(latestCloseKey);
     }
+    console.log(nextOpenKeys);
     GlobalStore.dispatch('setOpenKeys', openKeys);
   };
 

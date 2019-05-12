@@ -1,5 +1,5 @@
 import { createStore } from 'react-state-manage';
-import { setCookie, clearCookie } from '@utils/index';
+import { setCookie } from '@utils/index';
 import { COOKIE_KEYS, LOCALSTORAGE_KEYS } from '@constants/index';
 import { hashHistory } from './router';
 // import Axios from 'axios';
@@ -87,6 +87,7 @@ const { useStore, dispatch } = createStore({
       try {
         dispatch('setLoadding', true);
         const res = await AUTH(params);
+        dispatch('setAuth', res);
         const info = await Info(res.user.employee as string);
         res.user.employee = info;
         dispatch('setAuth', res);

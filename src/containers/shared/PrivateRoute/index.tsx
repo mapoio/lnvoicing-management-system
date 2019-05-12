@@ -21,6 +21,7 @@ const PrivateRoute = (props: any) => {
     try {
       AuthStore.dispatch('initUserInfo');
     } catch (err) {
+      console.log(user);
       console.warn(err);
       gotoLogin();
     }

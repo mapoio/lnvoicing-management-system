@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, message, Tooltip, Input, Row, Col, Divider, Tag, Badge } from 'antd';
+import { Table, Button, message, Tooltip, Input, Row, Col, Tag, Badge } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
 import { CustomerStore } from '@store/customer';
 import { Customer, customerType, customerStatus } from '@services/gql/customer';

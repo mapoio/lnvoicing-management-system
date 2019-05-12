@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Good, goodStatus } from '@services/gql/good';
 import { GoodStore } from '@store/good';
-import { searchItem } from '@utils/index';
 import { AutoComplete as Select } from 'antd';
 
 const Option = Select.Option;
@@ -13,7 +12,7 @@ interface IGoodSelect {
 }
 
 export const GoodSelect = (props: IGoodSelect) => {
-  const { good, setGood, active } = props;
+  const { setGood, active } = props;
   const [filter, setFilter] = useState('');
   const goodStore = GoodStore.useStore(s => s.list).filter(item => {
     if (!active) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as styles from '@shared/style/index.scss';
 import { PurchaseStore } from '@store/purchase';
 import { Row, Col, Divider, Table, InputNumber, Button, message, Input, Tooltip } from 'antd';
